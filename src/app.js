@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL, {GeolocateControl, Marker, Popup} from 'react-map-gl';
-import * as parkDate from "./data/skateboard-parks.json";
-const MAPBOX_TOKEN = 'pk.eyJ1IjoiZ3JleWtyYXYiLCJhIjoiY2p2dHdueW5qMWw5YzN6bzgxZmJ6ZGI0YyJ9.cjkhj2sNCi_xeQQpM1MHgA'; // Set your mapbox token here
+// import * as parkDate from "./data/skateboard-parks.json";
+import { REACT_APP_MAPBOX_API_KEY, TICKETMASTER_KEY } from './env';
 
 const geolocateStyle = {
   position: 'absolute',
@@ -10,26 +10,34 @@ const geolocateStyle = {
   left: 0,
   margin: 10
 };
-const ticketUrl = 'https://app.ticketmaster.com/discovery/v2/events.json?size=3&city=chicago&apikey=04HrEhaZmyaJysTpp6pIJeVndmGzVoNN'
+const ticketUrl = `https://app.ticketmaster.com/discovery/v2/events.json?size=30&city=chicago&apikey=${TICKETMASTER_KEY}`;
 
 
 export default class App extends Component {
   state = {
     viewport: {
-      latitude: 37.8,
-      longitude: 96,
-      zoom: 3,
-      bearing: 0,
-      pitch: 0
-    }
+      latitude: 41.86205404,
+      longitude: -87.61682143,
+      width: "100vw",
+      height: "100vh",
+      zoom: 10
+    },
+    events: []
   };
 
   handleClick = () => {
     return fetch(ticketUrl)
     .then((response) => response.json())
     .then((responseJson) => {
-
-      console.log(responseJson._embedded.events[i]._embedded)
+      const events = responseJson._embedded.events;
+      this.setState({
+        events,
+        viewport: {
+          ...this.state.viewport,
+          latitude: Number(events[1]._embedded.venues[0].location.latitude),
+          longitude: Number(events[1]._embedded.venues[0].location.longitude),
+        }
+      })
     })
     .catch((error) => {
       console.error(error);
@@ -40,7 +48,6 @@ export default class App extends Component {
 
   render() {
     const {viewport} = this.state;
-   
     return (
       <MapGL
         {...viewport}
@@ -48,14 +55,21 @@ export default class App extends Component {
         height="100%"
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={this._onViewportChange}
-        mapboxApiAccessToken={MAPBOX_TOKEN}
+        mapboxApiAccessToken={REACT_APP_MAPBOX_API_KEY}
       >
         <GeolocateControl
           style={geolocateStyle}
           positionOptions={{enableHighAccuracy: true}}
           trackUserLocation={true}
         />
-        <button onClick={this.handleClick}>Click Me</button>
+        {this.state.events.map((event, idx) => {
+          return <Marker
+            key={idx}
+            longitude={Number(event._embedded.venues[0].location.longitude)}
+            latitude={Number(event._embedded.venues[0].location.latitude)}
+          ><img width="20" src="https://img.icons8.com/office/2x/marker.png" /></Marker>
+        })}
+        <button onClick={this.handleClick}>Click Me ({this.state.events.length})</button>
       </MapGL>
     );
   }
@@ -64,3 +78,4 @@ export default class App extends Component {
 export function renderToDom(container) {
   render(<App />, container);
 }
+0
