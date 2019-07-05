@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL, {GeolocateControl, Marker, Popup} from 'react-map-gl';
 import * as parkDate from "./data/skateboard-parks.json";
-const MAPBOX_TOKEN = 'pk.eyJ1IjoiZ3JleWtyYXYiLCJhIjoiY2p2dHdueW5qMWw5YzN6bzgxZmJ6ZGI0YyJ9.cjkhj2sNCi_xeQQpM1MHgA'; // Set your mapbox token here
 
 const geolocateStyle = {
   position: 'absolute',
@@ -10,7 +9,9 @@ const geolocateStyle = {
   left: 0,
   margin: 10
 };
-const ticketUrl = 'https://app.ticketmaster.com/discovery/v2/events.json?size=3&city=chicago&apikey=04HrEhaZmyaJysTpp6pIJeVndmGzVoNN'
+const Ticket_Master_Key=process.env.apikey
+const ticketUrl = 'https://app.ticketmaster.com/discovery/v2/events.json?size=3&city=chicago&apikey='+Ticket_Master_Key
+const REACT_APP_MAPBOX_API_KEY=process.env.REACT_APP_MAPBOX_API_KEY
 
 
 export default class App extends Component {
@@ -29,7 +30,10 @@ export default class App extends Component {
     .then((response) => response.json())
     .then((responseJson) => {
 
-      console.log(responseJson._embedded.events[i]._embedded)
+      for (let x=0; x<responseJson._embedded.events.length; x++){
+      console.log(responseJson._embedded.events[x]._embedded.venues[0].location)
+      //merge each lat long as a marker into state
+      }
     })
     .catch((error) => {
       console.error(error);
@@ -48,14 +52,34 @@ export default class App extends Component {
         height="100%"
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={this._onViewportChange}
-        mapboxApiAccessToken={MAPBOX_TOKEN}
+        mapboxApiAccessToken={REACT_APP_MAPBOX_API_KEY}
       >
         <GeolocateControl
           style={geolocateStyle}
           positionOptions={{enableHighAccuracy: true}}
           trackUserLocation={true}
         />
+
         <button onClick={this.handleClick}>Click Me</button>
+
+        {parkDate.features.map(park => (
+          <Marker
+            key={park.properties.PARK_ID}
+            latitude={park.geometry.coordinates[1]}
+            longitude={park.geometry.coordinates[0]}
+          >
+            <button
+              className="marker-btn"
+              onClick={e => {
+                e.preventDefault();
+                setSelectedPark(park);
+              }}
+            >
+              <img src="/skateboarding.svg" alt="Skate Park Icon" />
+            </button>
+          </Marker>
+        ))}
+
       </MapGL>
     );
   }
