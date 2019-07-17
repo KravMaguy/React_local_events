@@ -24,7 +24,8 @@ export default class App extends Component {
     height: "100vh",
     zoom: 10
   },
-  events: []
+  events: [],
+  selectedEvent: null
   };
 
   handleClick = () => {
@@ -74,32 +75,35 @@ export default class App extends Component {
             longitude={Number(event._embedded.venues[0].location.longitude)}
             latitude={Number(event._embedded.venues[0].location.latitude)}
           >
-            <button className="marker-btn" onClick={e => {
-                e.preventDefault();
-                setSelectedPark(park);
-                this.setState({})
-                this.setState({ count: this.state.count + 1 })
+            <button className="marker-btn" onClick={e => { 
+              e.preventDefault()               
+                this.setState({selectedEvent: event
+                })
               }}
             >
               <img src="/skateboarding.svg" alt="Skate Park Icon" width='20px' />
             </button>
           </Marker>
         })}
-{selectedPark ? (
+        
+{this.state.selectedEvent ? (
           <Popup
-            latitude={selectedPark.geometry.coordinates[1]}
-            longitude={selectedPark.geometry.coordinates[0]}
+            latitude={Number(this.state.selectedEvent._embedded.venues[0].location.latitude)}
+            longitude={Number(this.state.selectedEvent._embedded.venues[0].location.longitude)}
             onClose={() => {
              // setSelectedPark(null);
+             //close the info window if necessary, 
+             //only display events within the next 24 hours
+             //you should open the map and it shows locations with events in the next 24 hours
              console.log('closed')
             }}
           >
             <div>
-              <h2>{selectedPark.properties.NAME}</h2>
-              <p>{selectedPark.properties.DESCRIPTIO}</p>
+              <h2>{this.state.selectedEvent.name}</h2>
+              <p>{/*selectedPark.properties.DESCRIPTIO*/}</p>
             </div>
           </Popup>
-        ) : null}
+          ) : null}
 
         <button onClick={this.handleClick}>Click Me ({this.state.events.length})</button>
       </MapGL>
