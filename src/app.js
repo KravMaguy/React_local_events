@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL, {GeolocateControl, Marker, Popup} from 'react-map-gl';
-import * as parkDate from "./data/skateboard-parks.json";
+//import { REACT_APP_MAPBOX_API_KEY, TICKETMASTER_KEY } from './env';
 
 const geolocateStyle = {
   position: 'absolute',
@@ -9,31 +9,37 @@ const geolocateStyle = {
   left: 0,
   margin: 10
 };
-const Ticket_Master_Key=process.env.apikey
-const ticketUrl = 'https://app.ticketmaster.com/discovery/v2/events.json?size=3&city=chicago&apikey='+Ticket_Master_Key
-const REACT_APP_MAPBOX_API_KEY=process.env.REACT_APP_MAPBOX_API_KEY
+
+//const ticketUrl = `https://app.ticketmaster.com/discovery/v2/events.json?size=30&city=chicago&apikey=${TICKETMASTER_KEY}`;
+//const REACT_APP_MAPBOX_API_KEY=process.env.REACT_APP_MAPBOX_API_KEY
+const ticketUrl = `https://app.ticketmaster.com/discovery/v2/events.json?size=30&city=chicago&apikey=4rTME5oHYcimuAeEz6QFqG0XSB1gHhC9`;
+const REACT_APP_MAPBOX_API_KEY='pk.eyJ1IjoiZ3JleWtyYXYiLCJhIjoiY2p4bXlwb3NjMDkwdDNobzZkYXIxeTB2bCJ9.23vaPNjrffSym1U2FJbPVw'
 
 
 export default class App extends Component {
   state = {
-    viewport: {
-      latitude: 37.8,
-      longitude: 96,
-      zoom: 3,
-      bearing: 0,
-      pitch: 0
-    }
+   viewport:{ latitude: 41.86205404,
+    longitude: -87.61682143,
+    width: "100vw",
+    height: "100vh",
+    zoom: 10
+  },
+  events: []
   };
 
   handleClick = () => {
     return fetch(ticketUrl)
     .then((response) => response.json())
     .then((responseJson) => {
-
-      for (let x=0; x<responseJson._embedded.events.length; x++){
-      console.log(responseJson._embedded.events[x]._embedded.venues[0].location)
-      //merge each lat long as a marker into state
-      }
+      const events = responseJson._embedded.events;
+      this.setState({
+        events,
+        viewport: {
+          ...this.state.viewport,
+          latitude: Number(events[1]._embedded.venues[0].location.latitude),
+          longitude: Number(events[1]._embedded.venues[0].location.longitude),
+        }
+      })
     })
     .catch((error) => {
       console.error(error);
@@ -53,6 +59,7 @@ export default class App extends Component {
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={this._onViewportChange}
         mapboxApiAccessToken={REACT_APP_MAPBOX_API_KEY}
+        
       >
         <GeolocateControl
           style={geolocateStyle}
@@ -60,26 +67,41 @@ export default class App extends Component {
           trackUserLocation={true}
         />
 
-        <button onClick={this.handleClick}>Click Me</button>
-
-        {parkDate.features.map(park => (
-          <Marker
-            key={park.properties.PARK_ID}
-            latitude={park.geometry.coordinates[1]}
-            longitude={park.geometry.coordinates[0]}
+       {this.state.events.map((event, idx) => {
+         console.log(event)
+          return <Marker
+            key={idx}
+            longitude={Number(event._embedded.venues[0].location.longitude)}
+            latitude={Number(event._embedded.venues[0].location.latitude)}
           >
-            <button
-              className="marker-btn"
-              onClick={e => {
+            <button className="marker-btn" onClick={e => {
                 e.preventDefault();
                 setSelectedPark(park);
+                this.setState({})
+                this.setState({ count: this.state.count + 1 })
               }}
             >
-              <img src="/skateboarding.svg" alt="Skate Park Icon" />
+              <img src="/skateboarding.svg" alt="Skate Park Icon" width='20px' />
             </button>
           </Marker>
-        ))}
+        })}
+{selectedPark ? (
+          <Popup
+            latitude={selectedPark.geometry.coordinates[1]}
+            longitude={selectedPark.geometry.coordinates[0]}
+            onClose={() => {
+             // setSelectedPark(null);
+             console.log('closed')
+            }}
+          >
+            <div>
+              <h2>{selectedPark.properties.NAME}</h2>
+              <p>{selectedPark.properties.DESCRIPTIO}</p>
+            </div>
+          </Popup>
+        ) : null}
 
+        <button onClick={this.handleClick}>Click Me ({this.state.events.length})</button>
       </MapGL>
     );
   }
