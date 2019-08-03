@@ -96,6 +96,8 @@ export default class App extends Component {
              //only display events within the next 24 hours
              //you should open the map and it shows locations with events in the next 24 hours
              console.log('closed')
+             this.setState({selectedEvent: null
+             })
             }}
           >
             <div>
