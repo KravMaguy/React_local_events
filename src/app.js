@@ -15,6 +15,18 @@ const geolocateStyle = {
 const ticketUrl = `https://app.ticketmaster.com/discovery/v2/events.json?size=30&city=chicago&apikey=4rTME5oHYcimuAeEz6QFqG0XSB1gHhC9`;
 const REACT_APP_MAPBOX_API_KEY='pk.eyJ1IjoiZ3JleWtyYXYiLCJhIjoiY2p4bXlwb3NjMDkwdDNobzZkYXIxeTB2bCJ9.23vaPNjrffSym1U2FJbPVw'
 
+class Modal extends React.Component {
+  render(){
+    return(
+      <div className = {'modal-wrapper '+this.props.modalVisibility}>
+        <div className = 'modal'>
+          <h1>Some Text on Modal</h1>
+          <button onClick = {this.props.onCloseRequest}>Okay</button>
+        </div>
+      </div>
+    )
+  }
+}
 
 export default class App extends Component {
   state = {
@@ -75,10 +87,10 @@ export default class App extends Component {
             longitude={Number(event._embedded.venues[0].location.longitude)}
             latitude={Number(event._embedded.venues[0].location.latitude)}
           >
-            <button className="marker-btn" onClick={e => { 
-              e.preventDefault()               
-                this.setState({selectedEvent: event
-                })
+            <button className="theme-btn" onClick={e => { 
+              e.preventDefault()
+              this.setState({modalVisibility: 'visible'})               
+              this.setState({selectedEvent: event})
               }}
             >
               <img src="/skateboarding.svg" alt="Skate Park Icon" width='20px' />
@@ -87,24 +99,21 @@ export default class App extends Component {
         })}
         
 {this.state.selectedEvent ? (
-          <Popup
-            latitude={Number(this.state.selectedEvent._embedded.venues[0].location.latitude)}
-            longitude={Number(this.state.selectedEvent._embedded.venues[0].location.longitude)}
-            onClose={() => {
+          <Modal
+            //latitude={Number(this.state.selectedEvent._embedded.venues[0].location.latitude)}
+           //longitude={Number(this.state.selectedEvent._embedded.venues[0].location.longitude)}
+            onCloseRequest={() => {
              // setSelectedPark(null);
              //close the info window if necessary, 
              //only display events within the next 24 hours
              //you should open the map and it shows locations with events in the next 24 hours
+             
              console.log('closed')
-             this.setState({selectedEvent: null
-             })
-            }}
-          >
-            <div>
-              <h2>{this.state.selectedEvent.name}</h2>
-              <p>{/*selectedPark.properties.DESCRIPTIO*/}</p>
-            </div>
-          </Popup>
+             this.setState({selectedEvent: null})
+             this.setState({modalVisibility: 'hidden'});
+            }} modalVisibility = {this.state.modalVisibility}
+          />
+       
           ) : null}
 
         <button onClick={this.handleClick}>Click Me ({this.state.events.length})</button>
