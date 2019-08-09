@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL, {GeolocateControl, Marker, Popup} from 'react-map-gl';
 //import { REACT_APP_MAPBOX_API_KEY, TICKETMASTER_KEY } from './env';
+import Modalstyles from './modalStyles.css';
 
 const geolocateStyle = {
   position: 'absolute',
