@@ -17,11 +17,14 @@ const ticketUrl = `https://app.ticketmaster.com/discovery/v2/events.json?size=30
 const REACT_APP_MAPBOX_API_KEY='pk.eyJ1IjoiZ3JleWtyYXYiLCJhIjoiY2p4bXlwb3NjMDkwdDNobzZkYXIxeTB2bCJ9.23vaPNjrffSym1U2FJbPVw'
 
 class Modal extends React.Component {
+  //let description=this.props.description;
   render(){
+    //console.log(this.props.event) 
     return(
       <div className = {'modal-wrapper '+this.props.modalVisibility}>
         <div className = 'modal'>
           <h1>Event: {this.props.name}</h1>
+          <p>Description: {/*description ? description : 'no description provided'*/} {this.props.description}</p>
           <button onClick = {this.props.onCloseRequest}>Okay</button>
         </div>
       </div>
@@ -101,6 +104,8 @@ export default class App extends Component {
         
 {this.state.selectedEvent ? (
           <Modal
+            description={this.state.selectedEvent.promoters[0].name}
+            event={this.state.selectedEvent}
             //latitude={Number(this.state.selectedEvent._embedded.venues[0].location.latitude)}
            //longitude={Number(this.state.selectedEvent._embedded.venues[0].location.longitude)}
             name={this.state.selectedEvent.name}
