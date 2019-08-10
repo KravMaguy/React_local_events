@@ -21,7 +21,7 @@ class Modal extends React.Component {
     return(
       <div className = {'modal-wrapper '+this.props.modalVisibility}>
         <div className = 'modal'>
-          <h1>Some Text on Modal</h1>
+          <h1>Event: {this.props.name}</h1>
           <button onClick = {this.props.onCloseRequest}>Okay</button>
         </div>
       </div>
@@ -103,6 +103,7 @@ export default class App extends Component {
           <Modal
             //latitude={Number(this.state.selectedEvent._embedded.venues[0].location.latitude)}
            //longitude={Number(this.state.selectedEvent._embedded.venues[0].location.longitude)}
+            name={this.state.selectedEvent.name}
             onCloseRequest={() => {
              // setSelectedPark(null);
              //close the info window if necessary, 
