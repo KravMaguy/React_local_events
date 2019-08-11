@@ -85,7 +85,7 @@ export default class App extends Component {
         />
 
        {this.state.events.map((event, idx) => {
-         console.log(event)
+         //console.log(event)
           return <Marker
             key={idx}
             longitude={Number(event._embedded.venues[0].location.longitude)}
@@ -104,7 +104,7 @@ export default class App extends Component {
         
 {this.state.selectedEvent ? (
           <Modal
-            description={this.state.selectedEvent.promoters[0] ? this.state.selectedEvent.promoters[0].name : 'no description provided'}
+            description={this.state.selectedEvent.promoter && this.state.selectedEvent.promoter.name ? this.state.selectedEvent.promoter.name : 'no description provided'}
             event={this.state.selectedEvent}
             //latitude={Number(this.state.selectedEvent._embedded.venues[0].location.latitude)}
            //longitude={Number(this.state.selectedEvent._embedded.venues[0].location.longitude)}
