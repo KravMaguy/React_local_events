@@ -19,12 +19,12 @@ const REACT_APP_MAPBOX_API_KEY='pk.eyJ1IjoiZ3JleWtyYXYiLCJhIjoiY2p4bXlwb3NjMDkwd
 class Modal extends React.Component {
   //let description=this.props.description;
   render(){
-    //console.log(this.props.event) 
+    console.log(this.props.event) 
     return(
       <div className = {'modal-wrapper '+this.props.modalVisibility}>
         <div className = 'modal'>
           <h1>Event: {this.props.name}</h1>
-          <p>Description: {/*description ? description : 'no description provided'*/} {this.props.description || 'the api did not provide a description'}</p>
+          <p>Description: {/*description ? description : 'no description provided'*/} {this.props.description}</p>
           <button onClick = {this.props.onCloseRequest}>Okay</button>
         </div>
       </div>
@@ -104,7 +104,7 @@ export default class App extends Component {
         
 {this.state.selectedEvent ? (
           <Modal
-            description={this.state.selectedEvent.promoters[0].name}
+            description={this.state.selectedEvent.promoters[0] ? this.state.selectedEvent.promoters[0].name : 'no description provided'}
             event={this.state.selectedEvent}
             //latitude={Number(this.state.selectedEvent._embedded.venues[0].location.latitude)}
            //longitude={Number(this.state.selectedEvent._embedded.venues[0].location.longitude)}
