@@ -24,7 +24,7 @@ class Modal extends React.Component {
       <div className = {'modal-wrapper '+this.props.modalVisibility}>
         <div className = 'modal'>
           <h1>Event: {this.props.name}</h1>
-          <p>Description: {/*description ? description : 'no description provided'*/} {this.props.description}</p>
+          <p>Description: {/*description ? description : 'no description provided'*/} {this.props.description || 'the api did not provide a description'}</p>
           <button onClick = {this.props.onCloseRequest}>Okay</button>
         </div>
       </div>
