@@ -104,7 +104,7 @@ export default class App extends Component {
         
 {this.state.selectedEvent ? (
           <Modal
-            description={this.state.selectedEvent.promoter && this.state.selectedEvent.promoter.name ? this.state.selectedEvent.promoter.name : 'no description provided'}
+            description={this.state.selectedEvent.promoter && this.state.selectedEvent.promoter.name ? this.state.selectedEvent.promoter.name : 'Ticketmaster API did not provide a description'}
             event={this.state.selectedEvent}
             //latitude={Number(this.state.selectedEvent._embedded.venues[0].location.latitude)}
            //longitude={Number(this.state.selectedEvent._embedded.venues[0].location.longitude)}
