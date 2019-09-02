@@ -3,6 +3,7 @@ import {render} from 'react-dom';
 import MapGL, {GeolocateControl, Marker, Popup} from 'react-map-gl';
 //import { REACT_APP_MAPBOX_API_KEY, TICKETMASTER_KEY } from './env';
 import './modalStyles.css';
+import {Navbar, NavbarBrand} from 'reactstrap'
 
 const geolocateStyle = {
   position: 'absolute',
@@ -11,20 +12,17 @@ const geolocateStyle = {
   margin: 10
 };
 
-//const ticketUrl = `https://app.ticketmaster.com/discovery/v2/events.json?size=30&city=chicago&apikey=${TICKETMASTER_KEY}`;
-//const REACT_APP_MAPBOX_API_KEY=process.env.REACT_APP_MAPBOX_API_KEY
 const ticketUrl = `https://app.ticketmaster.com/discovery/v2/events.json?size=30&city=chicago&apikey=4rTME5oHYcimuAeEz6QFqG0XSB1gHhC9`;
 const REACT_APP_MAPBOX_API_KEY='pk.eyJ1IjoiZ3JleWtyYXYiLCJhIjoiY2p4bXlwb3NjMDkwdDNobzZkYXIxeTB2bCJ9.23vaPNjrffSym1U2FJbPVw'
 
 class Modal extends React.Component {
-  //let description=this.props.description;
   render(){
     console.log(this.props.event) 
     return(
       <div className = {'modal-wrapper '+this.props.modalVisibility}>
         <div className = 'modal'>
           <h1>Event: {this.props.name}</h1>
-          <p>Description: {/*description ? description : 'no description provided'*/} {this.props.description}</p>
+          <p>Description: {this.props.description}</p>
           <button onClick = {this.props.onCloseRequest}>Okay</button>
         </div>
       </div>
@@ -69,6 +67,12 @@ export default class App extends Component {
     const {viewport} = this.state;
    
     return (
+      <div clasName="container">
+      <Navbar dark color="primary">
+      <div className="container">
+        <NavbarBrand href="/">React events</NavbarBrand>
+      </div>
+    </Navbar>
       <MapGL
         {...viewport}
         width="100%"
@@ -85,7 +89,6 @@ export default class App extends Component {
         />
 
        {this.state.events.map((event, idx) => {
-         //console.log(event)
           return <Marker
             key={idx}
             longitude={Number(event._embedded.venues[0].location.longitude)}
@@ -106,25 +109,18 @@ export default class App extends Component {
           <Modal
             description={this.state.selectedEvent.promoter && this.state.selectedEvent.promoter.name ? this.state.selectedEvent.promoter.name : 'Ticketmaster API did not provide a description'}
             event={this.state.selectedEvent}
-            //latitude={Number(this.state.selectedEvent._embedded.venues[0].location.latitude)}
-           //longitude={Number(this.state.selectedEvent._embedded.venues[0].location.longitude)}
             name={this.state.selectedEvent.name}
             onCloseRequest={() => {
-             // setSelectedPark(null);
-             //close the info window if necessary, 
-             //only display events within the next 24 hours
-             //you should open the map and it shows locations with events in the next 24 hours
-             
              console.log('closed')
              this.setState({selectedEvent: null})
              this.setState({modalVisibility: 'hidden'});
             }} modalVisibility = {this.state.modalVisibility}
-          />
-       
+          />      
           ) : null}
 
         <button onClick={this.handleClick}>Click Me ({this.state.events.length})</button>
       </MapGL>
+      </div>
     );
   }
 }
