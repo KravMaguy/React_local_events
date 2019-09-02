@@ -3,7 +3,7 @@ import {render} from 'react-dom';
 import MapGL, {GeolocateControl, Marker, Popup} from 'react-map-gl';
 //import { REACT_APP_MAPBOX_API_KEY, TICKETMASTER_KEY } from './env';
 import './modalStyles.css';
-import {Navbar, NavbarBrand} from 'reactstrap'
+import {Navbar, NavbarBrand} from 'reactstrap';
 
 const geolocateStyle = {
   position: 'absolute',
@@ -67,12 +67,13 @@ export default class App extends Component {
     const {viewport} = this.state;
    
     return (
-      <div clasName="container">
+      <div className="App">
       <Navbar dark color="primary">
-      <div className="container">
-        <NavbarBrand href="/">React events</NavbarBrand>
-      </div>
-    </Navbar>
+        <div className="container">
+          <NavbarBrand href="/">React local Events</NavbarBrand>
+        </div>
+      </Navbar>
+
       <MapGL
         {...viewport}
         width="100%"
@@ -120,7 +121,9 @@ export default class App extends Component {
 
         <button onClick={this.handleClick}>Click Me ({this.state.events.length})</button>
       </MapGL>
-      </div>
+    
+    
+    </div>
     );
   }
 }
