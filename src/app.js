@@ -1,9 +1,15 @@
 import React, {Component} from 'react';
+import './modalStyles.css';
+
+import 'bootstrap/dist/css/bootstrap.min.css'
+
 import {render} from 'react-dom';
 import MapGL, {GeolocateControl, Marker, Popup} from 'react-map-gl';
+// to fix you have to go to this link and follow these steps
+//https://medium.com/@trekinbami/using-environment-variables-in-react-6b0a99d83cf5
+
 //import { REACT_APP_MAPBOX_API_KEY, TICKETMASTER_KEY } from './env';
-import './modalStyles.css';
-import {Navbar, NavbarBrand} from 'reactstrap'
+import {Navbar, NavbarBrand} from 'reactstrap';
 
 const geolocateStyle = {
   position: 'absolute',
@@ -12,7 +18,11 @@ const geolocateStyle = {
   margin: 10
 };
 
-const ticketUrl = `https://app.ticketmaster.com/discovery/v2/events.json?size=30&city=chicago&apikey=4rTME5oHYcimuAeEz6QFqG0XSB1gHhC9`;
+//const ticketMasterKey=process.env.local.TICKETMASTER_KEY
+//const ticketUrl =`https://app.ticketmaster.com/discovery/v2/events.json?size=30&city=chicago&apikey=${ticketMasterKey}`;
+//const REACT_APP_MAPBOX_API_KEY=process.env.local.REACT_APP_MAPBOX_API;
+
+const ticketUrl =`https://app.ticketmaster.com/discovery/v2/events.json?size=30&city=chicago&apikey=4rTME5oHYcimuAeEz6QFqG0XSB1gHhC9`;
 const REACT_APP_MAPBOX_API_KEY='pk.eyJ1IjoiZ3JleWtyYXYiLCJhIjoiY2p4bXlwb3NjMDkwdDNobzZkYXIxeTB2bCJ9.23vaPNjrffSym1U2FJbPVw'
 
 class Modal extends React.Component {
@@ -67,12 +77,9 @@ export default class App extends Component {
     const {viewport} = this.state;
 
     return (
-      <div className="container">
-      <Navbar dark color="primary">
-      <div className="container">
-        <NavbarBrand href="/">React events</NavbarBrand>
-      </div>
-    </Navbar>
+
+
+
       <MapGL
         {...viewport}
         width="100%"
@@ -82,6 +89,11 @@ export default class App extends Component {
         mapboxApiAccessToken={REACT_APP_MAPBOX_API_KEY}
 
       >
+     <Navbar dark color="primary">
+        <div className="container">
+          <NavbarBrand href="/">React local Events</NavbarBrand>
+        </div>
+      </Navbar>
         <GeolocateControl
           style={geolocateStyle}
           positionOptions={{enableHighAccuracy: true}}
@@ -120,7 +132,8 @@ export default class App extends Component {
 
         <button onClick={this.handleClick}>Click Me ({this.state.events.length})</button>
       </MapGL>
-      </div>
+
+
     );
   }
 }
