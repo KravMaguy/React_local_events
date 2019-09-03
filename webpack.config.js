@@ -34,6 +34,10 @@ const config = {
             options: BABEL_CONFIG
           }
         ]
+      },
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader'
       }
     ]
   },

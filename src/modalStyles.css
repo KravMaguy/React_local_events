@@ -1,0 +1,108 @@
+.modal-wrapper {
+    position: fixed;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.8);
+    -webkit-perspective: 1000px;
+    perspective: 1000px;
+  }
+  .modal-wrapper.hidden {
+    display: none;
+  }
+  .modal-wrapper.visible {
+    display: flex;
+  }
+  .modal-wrapper .modal {
+    width: 60%;
+    height: auto;
+    background: white;
+    padding: 20px;
+    margin: 0 auto;
+    text-align: center;
+    border-radius: 4px;
+    box-shadow: 1px 2px 4px #000;
+    -webkit-animation: scale-up 1 0.6s ease 0s;
+            animation: scale-up 1 0.6s ease 0s;
+  }
+  .modal-wrapper .modal h1 {
+    margin: 0;
+    font-family: sans-serif;
+    font-size: 22px;
+    text-transform: capitalize;
+    font-weight: 100px;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 2px #ccc;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+  }
+  .modal-wrapper .modal button {
+    margin: 10px 0;
+    background: #cc0000;
+    border: 1px solid #cc0000;
+    color: white;
+    padding: 5px 20px;
+    box-shadow: 1px 2px 4px #000;
+    cursor: pointer;
+    transition: all 0.4s ease 0s;
+  }
+  .modal-wrapper .modal button:hover {
+    box-shadow: 2px 4px 8px #000;
+  }
+  .modal-wrapper .modal button:focus {
+    outline: none;
+  }
+  
+  @-webkit-keyframes top-in {
+    0% {
+      -webkit-transform: translateY(-1000px);
+              transform: translateY(-1000px);
+    }
+    100% {
+      -webkit-transform: translateY(0);
+              transform: translateY(0);
+    }
+  }
+  
+  @keyframes top-in {
+    0% {
+      -webkit-transform: translateY(-1000px);
+              transform: translateY(-1000px);
+    }
+    100% {
+      -webkit-transform: translateY(0);
+              transform: translateY(0);
+    }
+  }
+  @-webkit-keyframes scale-up {
+    0% {
+      -webkit-transform: scale(0);
+              transform: scale(0);
+    }
+    50% {
+      -webkit-transform: scale(1.08);
+              transform: scale(1.08);
+    }
+    100% {
+      -webkit-transform: scale(1);
+              transform: scale(1);
+    }
+  }
+  @keyframes scale-up {
+    0% {
+      -webkit-transform: scale(0);
+              transform: scale(0);
+    }
+    50% {
+      -webkit-transform: scale(1.08);
+              transform: scale(1.08);
+    }
+    100% {
+      -webkit-transform: scale(1);
+              transform: scale(1);
+    }
+  }
+ 

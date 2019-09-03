@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import MapGL, {GeolocateControl, Marker, Popup} from 'react-map-gl';
-// import * as parkDate from "./data/skateboard-parks.json";
-import { REACT_APP_MAPBOX_API_KEY, TICKETMASTER_KEY } from './env';
+//import { REACT_APP_MAPBOX_API_KEY, TICKETMASTER_KEY } from './env';
+import './modalStyles.css';
+import {Navbar, NavbarBrand} from 'reactstrap'
 
 const geolocateStyle = {
   position: 'absolute',
@@ -10,19 +11,35 @@ const geolocateStyle = {
   left: 0,
   margin: 10
 };
-const ticketUrl = `https://app.ticketmaster.com/discovery/v2/events.json?size=30&city=chicago&apikey=${TICKETMASTER_KEY}`;
 
+const ticketUrl = `https://app.ticketmaster.com/discovery/v2/events.json?size=30&city=chicago&apikey=4rTME5oHYcimuAeEz6QFqG0XSB1gHhC9`;
+const REACT_APP_MAPBOX_API_KEY='pk.eyJ1IjoiZ3JleWtyYXYiLCJhIjoiY2p4bXlwb3NjMDkwdDNobzZkYXIxeTB2bCJ9.23vaPNjrffSym1U2FJbPVw'
+
+class Modal extends React.Component {
+  render(){
+    console.log(this.props.event)
+    return(
+      <div className = {'modal-wrapper '+this.props.modalVisibility}>
+        <div className = 'modal'>
+          <h1>Event: {this.props.name}</h1>
+          <p>Description: {this.props.description}</p>
+          <button onClick = {this.props.onCloseRequest}>Okay</button>
+        </div>
+      </div>
+    )
+  }
+}
 
 export default class App extends Component {
   state = {
-    viewport: {
-      latitude: 41.86205404,
-      longitude: -87.61682143,
-      width: "100vw",
-      height: "100vh",
-      zoom: 10
-    },
-    events: []
+   viewport:{ latitude: 41.86205404,
+    longitude: -87.61682143,
+    width: "100vw",
+    height: "100vh",
+    zoom: 10
+  },
+  events: [],
+  selectedEvent: null
   };
 
   handleClick = () => {
@@ -48,7 +65,14 @@ export default class App extends Component {
 
   render() {
     const {viewport} = this.state;
+
     return (
+      <div className="container">
+      <Navbar dark color="primary">
+      <div className="container">
+        <NavbarBrand href="/">React events</NavbarBrand>
+      </div>
+    </Navbar>
       <MapGL
         {...viewport}
         width="100%"
@@ -56,21 +80,47 @@ export default class App extends Component {
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={this._onViewportChange}
         mapboxApiAccessToken={REACT_APP_MAPBOX_API_KEY}
+
       >
         <GeolocateControl
           style={geolocateStyle}
           positionOptions={{enableHighAccuracy: true}}
           trackUserLocation={true}
         />
-        {this.state.events.map((event, idx) => {
+
+       {this.state.events.map((event, idx) => {
           return <Marker
             key={idx}
             longitude={Number(event._embedded.venues[0].location.longitude)}
             latitude={Number(event._embedded.venues[0].location.latitude)}
-          ><img width="20" src="https://img.icons8.com/office/2x/marker.png" /></Marker>
+          >
+            <button className="theme-btn" onClick={e => {
+              e.preventDefault()
+              this.setState({modalVisibility: 'visible'})
+              this.setState({selectedEvent: event})
+              }}
+            >
+              <img src="/skateboarding.svg" alt="Skate Park Icon" width='20px' />
+            </button>
+          </Marker>
         })}
+
+{this.state.selectedEvent ? (
+          <Modal
+            description={this.state.selectedEvent.promoter && this.state.selectedEvent.promoter.name ? this.state.selectedEvent.promoter.name : 'Ticketmaster API did not provide a description'}
+            event={this.state.selectedEvent}
+            name={this.state.selectedEvent.name}
+            onCloseRequest={() => {
+             console.log('closed')
+             this.setState({selectedEvent: null})
+             this.setState({modalVisibility: 'hidden'});
+            }} modalVisibility = {this.state.modalVisibility}
+          />
+          ) : null}
+
         <button onClick={this.handleClick}>Click Me ({this.state.events.length})</button>
       </MapGL>
+      </div>
     );
   }
 }
@@ -78,4 +128,3 @@ export default class App extends Component {
 export function renderToDom(container) {
   render(<App />, container);
 }
-0
