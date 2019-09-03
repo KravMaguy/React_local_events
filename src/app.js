@@ -14,7 +14,11 @@ const geolocateStyle = {
   margin: 10
 };
 
-const ticketUrl = `https://app.ticketmaster.com/discovery/v2/events.json?size=30&city=chicago&apikey=4rTME5oHYcimuAeEz6QFqG0XSB1gHhC9`;
+//const ticketMasterKey=process.env.local.TICKETMASTER_KEY
+//const ticketUrl =`https://app.ticketmaster.com/discovery/v2/events.json?size=30&city=chicago&apikey=${ticketMasterKey}`;
+//const REACT_APP_MAPBOX_API_KEY=process.env.local.REACT_APP_MAPBOX_API;
+
+const ticketUrl =`https://app.ticketmaster.com/discovery/v2/events.json?size=30&city=chicago&apikey=4rTME5oHYcimuAeEz6QFqG0XSB1gHhC9`;
 const REACT_APP_MAPBOX_API_KEY='pk.eyJ1IjoiZ3JleWtyYXYiLCJhIjoiY2p4bXlwb3NjMDkwdDNobzZkYXIxeTB2bCJ9.23vaPNjrffSym1U2FJbPVw'
 
 class Modal extends React.Component {
