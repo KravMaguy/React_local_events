@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
-//import 'bootstrap/dist/css/bootstrap.min.css'
+import './modalStyles.css';
+
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 import {render} from 'react-dom';
 import MapGL, {GeolocateControl, Marker, Popup} from 'react-map-gl';
 //import { REACT_APP_MAPBOX_API_KEY, TICKETMASTER_KEY } from './env';
-import './modalStyles.css';
-//import {Navbar, NavbarBrand} from 'reactstrap';
+import {Navbar, NavbarBrand} from 'reactstrap';
 
 const geolocateStyle = {
   position: 'absolute',
@@ -73,12 +74,8 @@ export default class App extends Component {
     const {viewport} = this.state;
    
     return (
-    //  <div>
-    //   <Navbar dark color="primary">
-    //     <div className="container">
-    //       <NavbarBrand href="/">React local Events</NavbarBrand>
-    //     </div>
-    //   </Navbar>
+     
+ 
 
       <MapGL
         {...viewport}
@@ -89,7 +86,11 @@ export default class App extends Component {
         mapboxApiAccessToken={REACT_APP_MAPBOX_API_KEY}
         
       >
-
+     <Navbar dark color="primary">
+        <div className="container">
+          <NavbarBrand href="/">React local Events</NavbarBrand>
+        </div>
+      </Navbar>
         <GeolocateControl
           style={geolocateStyle}
           positionOptions={{enableHighAccuracy: true}}
@@ -128,7 +129,6 @@ export default class App extends Component {
 
         <button onClick={this.handleClick}>Click Me ({this.state.events.length})</button>
       </MapGL>
-    // </div>
     
    
     );
