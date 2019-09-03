@@ -28,6 +28,10 @@
     -webkit-animation: scale-up 1 0.6s ease 0s;
             animation: scale-up 1 0.6s ease 0s;
   }
+
+  .modal-wrapper.visible .modal {
+    display: block;
+  }
   .modal-wrapper .modal h1 {
     margin: 0;
     font-family: sans-serif;
@@ -55,7 +59,7 @@
   .modal-wrapper .modal button:focus {
     outline: none;
   }
-  
+
   @-webkit-keyframes top-in {
     0% {
       -webkit-transform: translateY(-1000px);
@@ -66,7 +70,7 @@
               transform: translateY(0);
     }
   }
-  
+
   @keyframes top-in {
     0% {
       -webkit-transform: translateY(-1000px);
@@ -105,4 +109,3 @@
               transform: scale(1);
     }
   }
- 
