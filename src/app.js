@@ -5,6 +5,9 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 
 import {render} from 'react-dom';
 import MapGL, {GeolocateControl, Marker, Popup} from 'react-map-gl';
+// to fix you have to go to this link and follow these steps
+//https://medium.com/@trekinbami/using-environment-variables-in-react-6b0a99d83cf5
+
 //import { REACT_APP_MAPBOX_API_KEY, TICKETMASTER_KEY } from './env';
 import {Navbar, NavbarBrand} from 'reactstrap';
 
