@@ -22,8 +22,10 @@ const geolocateStyle = {
 //const ticketUrl =`https://app.ticketmaster.com/discovery/v2/events.json?size=30&city=chicago&apikey=${ticketMasterKey}`;
 //const REACT_APP_MAPBOX_API_KEY=process.env.local.REACT_APP_MAPBOX_API;
 
+const hotelUrl=`https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyCFImmZyGtKhyhfyKxnJwd7csqCtXaNiIo&type=hotel&location=41.86205404,-87.61682143&radius=5500`
 const ticketUrl =`https://app.ticketmaster.com/discovery/v2/events.json?size=30&city=chicago&apikey=4rTME5oHYcimuAeEz6QFqG0XSB1gHhC9`;
 const REACT_APP_MAPBOX_API_KEY='pk.eyJ1IjoiZ3JleWtyYXYiLCJhIjoiY2p4bXlwb3NjMDkwdDNobzZkYXIxeTB2bCJ9.23vaPNjrffSym1U2FJbPVw'
+
 
 class Modal extends React.Component {
   render(){
@@ -51,6 +53,21 @@ export default class App extends Component {
   events: [],
   selectedEvent: null
   };
+  
+  getHotels = () => {
+    return fetch(hotelUrl)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      const events = responseJson.results
+
+    })
+    .then(console.log(events))
+    .catch((error) => {
+      console.error(error);
+    });
+  }
+
+
 
   handleClick = () => {
     return fetch(ticketUrl)
@@ -131,12 +148,19 @@ export default class App extends Component {
           ) : null}
 
         <button onClick={this.handleClick}>Click Me ({this.state.events.length})</button>
+		<button onClick={this.getHotels}>find hotels ({this.state.events.length})</button>
       </MapGL>
     
    
     );
   }
 }
+
+		// $(document).ready(function()
+		// {
+		// navigator.geolocation.getCurrentPosition(pozish);
+						
+		// });
 
 export function renderToDom(container) {
   render(<App />, container);
