@@ -61,13 +61,13 @@ export default class App extends Component {
 //no build tools, no set of tools to measure the performance so why is it an sdk? I just want them to give me some geojson and hotel info
 //asking for some info that is already public on their map is a get and is idempotence of the highest degree   
   componentDidMount() {
-    // this.service = new google.maps.places.PlacesService(React.createElement(
-    //   "div",
-    //   {className="hotelsInfo"},
-    //   null
-    // ) 
-    // );
-      this.service = new google.maps.places.PlacesService(map);
+    this.service = new google.maps.places.PlacesService(React.createElement(
+      "div",
+      null,
+      null
+    ) 
+    );
+     // this.service = new google.maps.places.PlacesService(map);
   }
   //end mosh put in
   searchIt= () => {
@@ -77,7 +77,7 @@ export default class App extends Component {
     keyword: 'nightlife'   
     }
 
-    this.service.nearbySearch(request, getHotels);
+    this.service.nearbySearch(request, this.getHotels);
   }
 
   getHotels = (response, error) => {
