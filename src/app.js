@@ -61,18 +61,33 @@ export default class App extends Component {
 //no build tools, no set of tools to measure the performance so why is it an sdk? I just want them to give me some geojson and hotel info
 //asking for some info that is already public on their map is a get and is idempotence of the highest degree   
   componentDidMount() {
-    this.service = new google.maps.places.PlacesService();
+    // this.service = new google.maps.places.PlacesService(React.createElement(
+    //   "div",
+    //   {className="hotelsInfo"},
+    //   null
+    // ) 
+    // );
+      this.service = new google.maps.places.PlacesService(map);
   }
-//end mosh put in
+  //end mosh put in
+  searchIt= () => {
+    var request={
+    bounds: {latitude: 41.86205404,
+      longitude: -87.61682143},
+    keyword: 'nightlife'   
+    }
 
-  getHotels = () => {
-    return fetch(hotelUrl)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      const events = responseJson.results
+    this.service.nearbySearch(request, getHotels);
+  }
 
-    })
-    .then(console.log(events))
+  getHotels = (response, error) => {
+     return fetch(hotelUrl)
+     .then((response) => response.json())
+     .then((responseJson) => {
+       const events = responseJson.results
+
+     })
+     .then(console.log(events))
     .catch((error) => {
       console.error(error);
     });
@@ -159,7 +174,7 @@ export default class App extends Component {
           ) : null}
 
         <button onClick={this.handleClick}>Click Me ({this.state.events.length})</button>
-		<button onClick={this.getHotels}>find hotels ({this.state.events.length})</button>
+		<button onClick={this.searchIt}>find hotels ({this.state.events.length})</button>
       </MapGL>
 
 
