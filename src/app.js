@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './modalStyles.css';
 
 import 'bootstrap/dist/css/bootstrap.min.css'
-
+import { Button } from 'reactstrap';
 import {render} from 'react-dom';
 import MapGL, {GeolocateControl, Marker, Popup} from 'react-map-gl';
 // to fix you have to go to this link and follow these steps
@@ -35,7 +35,7 @@ class Modal extends React.Component {
         <div className = 'modal'>
           <h1>Event: {this.props.name}</h1>
           <p>Description: {this.props.description}</p>
-          <button onClick = {this.props.onCloseRequest}>Okay</button>
+          <Button color="primary" onClick = {this.props.onCloseRequest}>Okay</Button>
         </div>
       </div>
     )
@@ -123,14 +123,14 @@ export default class App extends Component {
             longitude={Number(event._embedded.venues[0].location.longitude)}
             latitude={Number(event._embedded.venues[0].location.latitude)}
           >
-            <button className="theme-btn" onClick={e => { 
+            <Button color="secondary" className="theme-btn" onClick={e => { 
               e.preventDefault()
               this.setState({modalVisibility: 'visible'})               
               this.setState({selectedEvent: event})
               }}
             >
               <img src="/skateboarding.svg" alt="Skate Park Icon" width='20px' />
-            </button>
+            </Button>
           </Marker>
         })}
         
@@ -147,8 +147,8 @@ export default class App extends Component {
           />      
           ) : null}
 
-        <button onClick={this.handleClick}>Click Me ({this.state.events.length})</button>
-		<button onClick={this.getHotels}>find hotels ({this.state.events.length})</button>
+        <Button color='secondary' onClick={this.handleClick}>Click Me ({this.state.events.length})</Button>
+		<Button color='info' onClick={this.getHotels}>find hotels ({this.state.events.length})</Button>
       </MapGL>
     
    
