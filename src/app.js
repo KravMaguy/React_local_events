@@ -67,9 +67,8 @@ export default class App extends Component {
   }
   //end mosh put in
   searchIt= () => {
+    console.log('check1')
     var request={
-    bounds: {latitude: 41.86205404,
-      longitude: -87.61682143},
     keyword: 'nightlife'   
     }
 
@@ -85,7 +84,7 @@ export default class App extends Component {
      })
      .then(console.log(events))
     .catch((error) => {
-      console.error(error);
+      console.error('this is the error is happening: '+error);
     });
   }
 
