@@ -55,7 +55,11 @@ export default class App extends Component {
   events: [],
   selectedEvent: null
   };
-//this mosh put in
+//this mosh put in Google is not allow to call directly to their server and require to use the SDK, that's why is different.
+//Using Google Maps API via the SDK requires the SDK script to load.
+//this above he said does not make sense because they do not provide an sdk no environment like android studio, leapmotion
+//no build tools, no set of tools to measure the performance so why is it an sdk? I just want them to give me some geojson and hotel info
+//asking for some info that is already public on their map is a get and is idempotence of the highest degree   
   componentDidMount() {
     this.service = new google.maps.places.PlacesService();
   }
