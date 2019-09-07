@@ -61,11 +61,7 @@ export default class App extends Component {
 //no build tools, no set of tools to measure the performance so why is it an sdk? I just want them to give me some geojson and hotel info
 //asking for some info that is already public on their map is a get and is idempotence of the highest degree   
   componentDidMount() {
-    this.service = new google.maps.places.PlacesService(React.createElement(
-      "div",
-      null,
-      null
-    ) 
+    this.service = new google.maps.places.PlacesService(document.getElementById("googlestuff") 
     );
      // this.service = new google.maps.places.PlacesService(map);
   }
@@ -120,8 +116,6 @@ export default class App extends Component {
     const {viewport} = this.state;
 
     return (
-
-
 
       <MapGL
         {...viewport}
