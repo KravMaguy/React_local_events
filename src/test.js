@@ -80,7 +80,7 @@ export default class App extends Component {
   getHotels = (x) => {
     console.log(x);
     console.log('this is x length'+x.length)
-    x.map(hotel=>console.log(hotel.geometry.location.lat(),hotel.geometry.location.lng()))
+    x.map(hotel=>console.log(hotel.geometry.location.lat(),hotel.geometry.location.lng()));
     console.log('the state is : ');
     console.log(this.state);
   }
