@@ -1,325 +1,324 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="UTF-8">
     <title>title</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <style>
-    body {
-  margin: 0;
-  background: #78909C
-}
-
-.map {
-  width: 700px;
-  height: 380px;
-  margin: calc(50vh - 190px) auto;
-  box-shadow: 0 0 40px -10px black;
-  background: rgb(240, 240, 240);
-  font-family: 'Montserrat', sans-serif;
-  max-width: calc(100vw - 60px)
-}
-
-#map {
-  width: 65%;
-  height: 380px;
-  display: inline-block
-}
-
-.map-c {
-  float: right;
-  width: 35%;
-  height: 100%;
-  padding: 25px;
-  box-sizing: border-box
-}
-
-h1 {
-  margin: 0;
-  font-weight: normal;
-  color: rgb(60, 60, 70);
-  font-size: 28px
-}
-
-p {
-  font-size: 13px;
-  margin-top: 20px;
-  margin-bottom: 30px
-}
-
-.det {
-  font-size: 12px;
-  margin-bottom: 15px
-}
-
-i {
-  float: left;
-  font-size: 18px !important;
-  margin: 0 8px 0 0
-}
-
-button {
-  margin: 15px 4px;
-  padding: 13px 9px;
-  display: inline-block;
-  cursor: pointer;
-  background: none;
-  color: #546973;
-  border: 2px solid #78909C;
-  transition: all 0.3s;
-  border-radius: 8px;
-  outline:0
-}
-
-button:hover {
-  border-color: rgb(90, 90, 90);
-  color: rgb(90, 90, 90)
-}
-
-button:after {
-  content: 'Refresh';
-  font-family: 'Montserrat', sans-serif;
-  display: block;
-  font-size: 11px;
-  margin-top: 8px
-}
-
-.fa-user-plus:after {
-  content:'Add Me';
-  margin:8px 13px 0
-}
-
-@media only screen and (max-width: 720px) {
-  .map {
-    height: 450px;
-    margin: calc(50vh - 225px) auto;
-    overflow: hidden
-  }
-  #map {
-    width: 100%;
-    height: 200px;
-  }
-  .map-c {
-    float: right;
-    width: 100%;
-  }
-  button {
-    float: right;
-    margin-top: -75px
-  }
-}
-
-@media only screen and (max-width: 460px) {
-  p {
-    display: none
-  }
-  h1 {
-    margin-bottom:20px
-  }
-  button {
-    float: none;
-    margin-top: 10px
-  }
-  .det {
-    margin-bottom: 9px
-  }
-}
-    </style>
-  </head>
-  <body>
-  <div class="map">
-  <div id="map"></div>
-  <div class="map-c">
-    <h1 id="title">Random Bar</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium id cumque est dolores voluptatibus.</p>
-    <div id='adress' class="det"><i class="fa fa-map-marker"></i> 102 New Road, New City</div>
-    <div class="det"><i class="fa fa-phone"></i> 001 2045 509</div>
-    <div class="det"><i class="fa fa-globe"></i> www.randombar.com</div>
-    <center>
-      <button id='refresh' class='fa fa-refresh' ></button>
-      <button class="fa fa-user-plus"></button>
-    </center>
-  </div>
-</div> 
-<script>
-	/*credit Dave Wallace youtube video for teaching some features of the map and how to query it, credit traversy media for instructional youtube videos, credit randall dawson @ freecodecamp for patience and teaching me many techniques, and suggesting ideas to implement to make this a better app, credit @ google for supplying the info*/ 
-		var map;
-		var service;
-		
-		function ToDo(results, status){
-		//console.log(results);
-		//console.log(results[0]);
-	//var headers=[];
-			for (let i=0; i<results.length;i++){
-				//console.log(results[i].name);
-			
-			
-			var flag= 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
-			var marker = new google.maps.Marker({
-                      position: results[i].geometry.location,
-                      map: map,
-					            icon: flag
-
-            });
-        			//console.log(marker);
-              //headers.push(results[i].name);
-        //console.log(marker);
-        marker.addListener("click", function(){
-    //alert(results[i].name);
-          //console.log(results[i].vicinity);
-          document.getElementById('title').innerHTML= results[i].name;
-         document.getElementById('adress').innerHTML= results[i].vicinity;
-});
+        body {
+            margin: 0;
+            background: #78909C
+        }
         
+        .map {
+            width: 700px;
+            height: 380px;
+            margin: calc(50vh - 190px) auto;
+            box-shadow: 0 0 40px -10px black;
+            background: rgb(240, 240, 240);
+            font-family: 'Montserrat', sans-serif;
+            max-width: calc(100vw - 60px)
+        }
         
-			
-			}
-			
-		}
-		
-		
-		function searchIt(){
-			var request={
-			bounds: map.getBounds(),
-			keyword: 'nightlife'
-			
-			}
-		service.nearbySearch(request, ToDo);
-
-		};
-		
-		function pozish(poz){
-		//console.log(poz);
-			
-		  currentPozish= new google.maps.LatLng(poz.coords.latitude, poz.coords.longitude);
-		  var mapOptions =
-          {
-                      center: currentPozish,
-					  zoom: 13,
-                      mapTypeId: google.maps.MapTypeId.ROADMAP,
-					  styles: [
-            {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
-            {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
-            {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
-            {
-              featureType: 'administrative.locality',
-              elementType: 'labels.text.fill',
-              stylers: [{color: '#d59563'}]
-            },
-            {
-              featureType: 'poi',
-              elementType: 'labels.text.fill',
-              stylers: [{color: '#d59563'}]
-            },
-            {
-              featureType: 'poi.park',
-              elementType: 'geometry',
-              stylers: [{color: '#263c3f'}]
-            },
-            {
-              featureType: 'poi.park',
-              elementType: 'labels.text.fill',
-              stylers: [{color: '#6b9a76'}]
-            },
-            {
-              featureType: 'road',
-              elementType: 'geometry',
-              stylers: [{color: '#38414e'}]
-            },
-            {
-              featureType: 'road',
-              elementType: 'geometry.stroke',
-              stylers: [{color: '#212a37'}]
-            },
-            {
-              featureType: 'road',
-              elementType: 'labels.text.fill',
-              stylers: [{color: '#9ca5b3'}]
-            },
-            {
-              featureType: 'road.highway',
-              elementType: 'geometry',
-              stylers: [{color: '#746855'}]
-            },
-            {
-              featureType: 'road.highway',
-              elementType: 'geometry.stroke',
-              stylers: [{color: '#1f2835'}]
-            },
-            {
-              featureType: 'road.highway',
-              elementType: 'labels.text.fill',
-              stylers: [{color: '#f3d19c'}]
-            },
-            {
-              featureType: 'transit',
-              elementType: 'geometry',
-              stylers: [{color: '#2f3948'}]
-            },
-            {
-              featureType: 'transit.station',
-              elementType: 'labels.text.fill',
-              stylers: [{color: '#d59563'}]
-            },
-            {
-              featureType: 'water',
-              elementType: 'geometry',
-              stylers: [{color: '#17263c'}]
-            },
-            {
-              featureType: 'water',
-              elementType: 'labels.text.fill',
-              stylers: [{color: '#515c6d'}]
-            },
-            {
-              featureType: 'water',
-              elementType: 'labels.text.stroke',
-              stylers: [{color: '#17263c'}]
+        #map {
+            width: 65%;
+            height: 380px;
+            display: inline-block
+        }
+        
+        .map-c {
+            float: right;
+            width: 35%;
+            height: 100%;
+            padding: 25px;
+            box-sizing: border-box
+        }
+        
+        h1 {
+            margin: 0;
+            font-weight: normal;
+            color: rgb(60, 60, 70);
+            font-size: 28px
+        }
+        
+        p {
+            font-size: 13px;
+            margin-top: 20px;
+            margin-bottom: 30px
+        }
+        
+        .det {
+            font-size: 12px;
+            margin-bottom: 15px
+        }
+        
+        i {
+            float: left;
+            font-size: 18px !important;
+            margin: 0 8px 0 0
+        }
+        
+        button {
+            margin: 15px 4px;
+            padding: 13px 9px;
+            display: inline-block;
+            cursor: pointer;
+            background: none;
+            color: #546973;
+            border: 2px solid #78909C;
+            transition: all 0.3s;
+            border-radius: 8px;
+            outline: 0
+        }
+        
+        button:hover {
+            border-color: rgb(90, 90, 90);
+            color: rgb(90, 90, 90)
+        }
+        
+        button:after {
+            content: 'Refresh';
+            font-family: 'Montserrat', sans-serif;
+            display: block;
+            font-size: 11px;
+            margin-top: 8px
+        }
+        
+        .fa-user-plus:after {
+            content: 'Add Me';
+            margin: 8px 13px 0
+        }
+        
+        @media only screen and (max-width: 720px) {
+            .map {
+                height: 450px;
+                margin: calc(50vh - 225px) auto;
+                overflow: hidden
             }
-          ]
-            };
-			map = new google.maps.Map(document.getElementById("map"), mapOptions);
-			
-			var marker = new google.maps.Marker({
-                      position: currentPozish,
-                      map: map
-            });
-      
-			/*
-      $('map').addEventListener('click', function(){
-        alert('map has been clicked');
-          // $('#title').prepend(results.[i].name);
-					});
-          */
-			
-      marker.addListener('click', function(){
-        window.alert('home base was clicked');
-        // Add marker
-        //addMarker({coords:event.latLng});
-      });
-      
-       
-			service = new google.maps.places.PlacesService(map);
-			//wait until map is loaded to initialize the bounds, then call searchit
-			google.maps.event.addListenerOnce(map, 'bounds_changed', searchIt);
-			
-			$('#refresh').click(searchIt);
-			
+            #map {
+                width: 100%;
+                height: 200px;
+            }
+            .map-c {
+                float: right;
+                width: 100%;
+            }
+            button {
+                float: right;
+                margin-top: -75px
+            }
+        }
+        
+        @media only screen and (max-width: 460px) {
+            p {
+                display: none
+            }
+            h1 {
+                margin-bottom: 20px
+            }
+            button {
+                float: none;
+                margin-top: 10px
+            }
+            .det {
+                margin-bottom: 9px
+            }
+        }
+    </style>
+</head>
 
-			}
-			
-			
-   
-   
-		$(document).ready(function()
-		{
-		navigator.geolocation.getCurrentPosition(pozish);
-						
-		});
-</script> 
-   <script async defer
-   src=
-   "https://maps.googleapis.com/maps/api/js?libraries=places,geometry,drawing&key=AIzaSyCFImmZyGtKhyhfyKxnJwd7csqCtXaNiIo&v=3&callback=pozish">
-</script>
-  </body>
+<body>
+    <div class="map">
+        <div id="map"></div>
+        <div class="map-c">
+            <h1 id="title">Random Bar</h1>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium id cumque est dolores voluptatibus.</p>
+            <div id='adress' class="det"><i class="fa fa-map-marker"></i> 102 New Road, New City</div>
+            <div class="det"><i class="fa fa-phone"></i> 001 2045 509</div>
+            <div class="det"><i class="fa fa-globe"></i> www.randombar.com</div>
+            <center>
+                <button id='refresh' class='fa fa-refresh'></button>
+                <button class="fa fa-user-plus"></button>
+            </center>
+        </div>
+    </div>
+    <script>
+        var map;
+        var service;
+
+        function ToDo(results, status) {
+
+            for (let i = 0; i < results.length; i++) {
+
+                var flag = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+                var marker = new google.maps.Marker({
+                    position: results[i].geometry.location,
+                    map: map,
+                    icon: flag
+
+                });
+
+                marker.addListener("click", function() {
+
+                    document.getElementById('title').innerHTML = results[i].name;
+                    document.getElementById('adress').innerHTML = results[i].vicinity;
+                });
+
+            }
+
+        }
+
+        function searchIt() {
+            var request = {
+                bounds: map.getBounds(),
+                keyword: 'nightlife'
+
+            }
+            service.nearbySearch(request, ToDo);
+
+        };
+
+        function pozish(poz) {
+
+            currentPozish = new google.maps.LatLng(poz.coords.latitude, poz.coords.longitude);
+            var mapOptions = {
+                center: currentPozish,
+                zoom: 13,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                styles: [{
+                    elementType: 'geometry',
+                    stylers: [{
+                        color: '#242f3e'
+                    }]
+                }, {
+                    elementType: 'labels.text.stroke',
+                    stylers: [{
+                        color: '#242f3e'
+                    }]
+                }, {
+                    elementType: 'labels.text.fill',
+                    stylers: [{
+                        color: '#746855'
+                    }]
+                }, {
+                    featureType: 'administrative.locality',
+                    elementType: 'labels.text.fill',
+                    stylers: [{
+                        color: '#d59563'
+                    }]
+                }, {
+                    featureType: 'poi',
+                    elementType: 'labels.text.fill',
+                    stylers: [{
+                        color: '#d59563'
+                    }]
+                }, {
+                    featureType: 'poi.park',
+                    elementType: 'geometry',
+                    stylers: [{
+                        color: '#263c3f'
+                    }]
+                }, {
+                    featureType: 'poi.park',
+                    elementType: 'labels.text.fill',
+                    stylers: [{
+                        color: '#6b9a76'
+                    }]
+                }, {
+                    featureType: 'road',
+                    elementType: 'geometry',
+                    stylers: [{
+                        color: '#38414e'
+                    }]
+                }, {
+                    featureType: 'road',
+                    elementType: 'geometry.stroke',
+                    stylers: [{
+                        color: '#212a37'
+                    }]
+                }, {
+                    featureType: 'road',
+                    elementType: 'labels.text.fill',
+                    stylers: [{
+                        color: '#9ca5b3'
+                    }]
+                }, {
+                    featureType: 'road.highway',
+                    elementType: 'geometry',
+                    stylers: [{
+                        color: '#746855'
+                    }]
+                }, {
+                    featureType: 'road.highway',
+                    elementType: 'geometry.stroke',
+                    stylers: [{
+                        color: '#1f2835'
+                    }]
+                }, {
+                    featureType: 'road.highway',
+                    elementType: 'labels.text.fill',
+                    stylers: [{
+                        color: '#f3d19c'
+                    }]
+                }, {
+                    featureType: 'transit',
+                    elementType: 'geometry',
+                    stylers: [{
+                        color: '#2f3948'
+                    }]
+                }, {
+                    featureType: 'transit.station',
+                    elementType: 'labels.text.fill',
+                    stylers: [{
+                        color: '#d59563'
+                    }]
+                }, {
+                    featureType: 'water',
+                    elementType: 'geometry',
+                    stylers: [{
+                        color: '#17263c'
+                    }]
+                }, {
+                    featureType: 'water',
+                    elementType: 'labels.text.fill',
+                    stylers: [{
+                        color: '#515c6d'
+                    }]
+                }, {
+                    featureType: 'water',
+                    elementType: 'labels.text.stroke',
+                    stylers: [{
+                        color: '#17263c'
+                    }]
+                }]
+            };
+            map = new google.maps.Map(document.getElementById("map"), mapOptions);
+
+            var marker = new google.maps.Marker({
+                position: currentPozish,
+                map: map
+            });
+
+            marker.addListener('click', function() {
+                window.alert('home base was clicked');
+            });
+
+            service = new google.maps.places.PlacesService(map);
+            //wait until map is loaded to initialize the bounds, then call searchit
+            google.maps.event.addListenerOnce(map, 'bounds_changed', searchIt);
+
+            $('#refresh').click(searchIt);
+
+        }
+
+        $(document).ready(function() {
+            navigator.geolocation.getCurrentPosition(pozish);
+
+        });
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry,drawing&key=AIzaSyCFImmZyGtKhyhfyKxnJwd7csqCtXaNiIo&v=3&callback=pozish">
+    </script>
+</body>
+
 </html>

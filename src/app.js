@@ -43,7 +43,6 @@ class Modal extends React.Component {
 }
 
 export default class App extends Component {
-  // service it a property of the *class* App
   service;
   state = {
    viewport:{ latitude: 41.86205404,
@@ -63,9 +62,8 @@ export default class App extends Component {
   componentDidMount() {
     this.service = new google.maps.places.PlacesService(document.getElementById("googlestuff") 
     );
-     // this.service = new google.maps.places.PlacesService(map);
   }
-  //end mosh put in
+
   searchIt= () => {
     console.log('check1')
     var request={
@@ -73,27 +71,17 @@ export default class App extends Component {
     lat: 41.86205404,
     lng: -87.61682143},
     radius: 10000,
-    keyword: 'nightlife'   
+    keyword: 'hotel'   
     }
 
     this.service.nearbySearch(request, this.getHotels);
   }
 
   getHotels = (x) => {
-    //  return fetch(hotelUrl)
-    //  .then((response) => response.json())
-    //  .then((responseJson) => {
-    //    const events = responseJson.results
-
-    //  })
-    //  .then(console.log(events))
-    // .catch((error) => {
-    //   console.error('this is the error is happening: '+error);
-    // });
     console.log(x);
+    console.log('this is x length'+x.length)
+    console.log(x[0].geometry.location.lat())
   }
-
-
 
   handleClick = () => {
     return fetch(ticketUrl)
@@ -180,11 +168,6 @@ export default class App extends Component {
   }
 }
 
-		// $(document).ready(function()
-		// {
-		// navigator.geolocation.getCurrentPosition(pozish);
-
-		// });
 export function renderToDom(container) {
   render(<App />, container);
 }
