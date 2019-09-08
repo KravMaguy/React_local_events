@@ -59,9 +59,9 @@ export default class App extends Component {
 //Using Google Maps API via the SDK requires the SDK script to load.
 //this above he said does not make sense because they do not provide an sdk no environment like android studio, leapmotion
 //no build tools, no set of tools to measure the performance so why is it an sdk? I just want them to give me some geojson and hotel info
-//asking for some info that is already public on their map is a get and is idempotence of the highest degree   
+//asking for some info that is already public on their map is a get and is idempotence of the highest degree
   componentDidMount() {
-    this.service = new google.maps.places.PlacesService(document.getElementById("googlestuff") 
+    this.service = new google.maps.places.PlacesService(document.getElementById("googlestuff")
     );
   }
 
@@ -72,7 +72,7 @@ export default class App extends Component {
     lat: 41.86205404,
     lng: -87.61682143},
     radius: 10000,
-    keyword: 'hotel'   
+    keyword: 'hotel'
     }
 
     this.service.nearbySearch(request, this.getHotels);
@@ -83,7 +83,7 @@ export default class App extends Component {
     console.log('this is x length'+x.length)
     x.map(hotel=>console.log(hotel.geometry.location.lat(),hotel.geometry.location.lng()))
     console.log('the state is : ');
-    
+
     this.setState({hotels:x})
     console.log(this.state);
   }
@@ -112,6 +112,7 @@ export default class App extends Component {
 
   render() {
     const {viewport} = this.state;
+    console.log(viewport);
 
     return (
 
@@ -138,9 +139,10 @@ export default class App extends Component {
 {this.state.hotels.map((hotel, idx) => {
           return <Marker
             key={idx}
-            longitude={Number(hotel.geometry.location.lat())}
-            latitude={Number(hotel.geometry.location.lng())}
+            longitude={Number(hotel.geometry.location.lng())}
+            latitude={Number(hotel.geometry.location.lat())}
           >
+            <img style={{width: 20, height: 20, borderRadius: '50%'}} src="https://png.pngtree.com/element_our/md/20180518/md_5afec7ed7dd4e.jpg" />
             {/* <button className="theme-btn" onClick={e => {
               e.preventDefault()
               console.log('a hotel was clicked');
@@ -186,7 +188,7 @@ export default class App extends Component {
           ) : null}
 
         <button onClick={this.handleClick}>Click Me ({this.state.events.length})</button>
-		<button onClick={this.searchIt}>find hotels ({this.state.events.length})</button>
+		<button onClick={this.searchIt}>find hotels ({this.state.hotels.length})</button>
       </MapGL>
 
 
