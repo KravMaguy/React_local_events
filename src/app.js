@@ -80,7 +80,8 @@ export default class App extends Component {
   getHotels = (x) => {
     console.log(x);
     console.log('this is x length'+x.length)
-    console.log(x[0].geometry.location.lat())
+    x.map(hotel=>console.log(hotel.geometry.location.lat(),hotel.geometry.location.lng()))
+
   }
 
   handleClick = () => {
@@ -88,6 +89,7 @@ export default class App extends Component {
     .then((response) => response.json())
     .then((responseJson) => {
       const events = responseJson._embedded.events;
+      console.log(events)
       this.setState({
         events,
         viewport: {
