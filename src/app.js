@@ -135,6 +135,26 @@ export default class App extends Component {
           trackUserLocation={true}
         />
 
+{this.state.hotels.map((hotel, idx) => {
+          return <Marker
+            key={idx}
+            longitude={Number(hotel.geometry.location.lat())}
+            latitude={Number(hotel.geometry.location.lng())}
+          >
+            {/* <button className="theme-btn" onClick={e => {
+              e.preventDefault()
+              console.log('a hotel was clicked');
+              // this.setState({modalVisibility: 'visible'})
+              // this.setState({selectedEvent: event})
+              }}
+            >
+              <img src="/skateboarding.svg" alt="Skate Park Icon" width='20px' />
+            </button> */}
+          </Marker>
+        })}
+
+
+
        {this.state.events.map((event, idx) => {
           return <Marker
             key={idx}
