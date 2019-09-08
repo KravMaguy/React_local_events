@@ -69,8 +69,10 @@ export default class App extends Component {
   searchIt= () => {
     console.log('check1')
     var request={
-      location: {lat: 41.86205404,
-      lng: -87.61682143},
+    location: {
+    lat: 41.86205404,
+    lng: -87.61682143},
+    radius: 10000,
     keyword: 'nightlife'   
     }
 
