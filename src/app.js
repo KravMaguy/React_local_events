@@ -79,17 +79,18 @@ export default class App extends Component {
     this.service.nearbySearch(request, this.getHotels);
   }
 
-  getHotels = (response, error) => {
-     return fetch(hotelUrl)
-     .then((response) => response.json())
-     .then((responseJson) => {
-       const events = responseJson.results
+  getHotels = (x) => {
+    //  return fetch(hotelUrl)
+    //  .then((response) => response.json())
+    //  .then((responseJson) => {
+    //    const events = responseJson.results
 
-     })
-     .then(console.log(events))
-    .catch((error) => {
-      console.error('this is the error is happening: '+error);
-    });
+    //  })
+    //  .then(console.log(events))
+    // .catch((error) => {
+    //   console.error('this is the error is happening: '+error);
+    // });
+    console.log(x);
   }
 
 
