@@ -51,6 +51,7 @@ export default class App extends Component {
     height: "100vh",
     zoom: 10
   },
+  hotels:[],
   events: [],
   selectedEvent: null
   };
@@ -82,6 +83,8 @@ export default class App extends Component {
     console.log('this is x length'+x.length)
     x.map(hotel=>console.log(hotel.geometry.location.lat(),hotel.geometry.location.lng()))
     console.log('the state is : ');
+    
+    this.setState({hotels:x})
     console.log(this.state);
   }
 
