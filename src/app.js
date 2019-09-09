@@ -34,7 +34,7 @@ class Modal extends React.Component {
       <div className = {'modal-wrapper '+this.props.modalVisibility}>
         <div className = 'modal'>
           <h1> {this.props.name? this.props.name: this.props.hotelname}</h1>
-          <p>Description: {this.props.description}</p>
+          <p> {this.props.description? this.props.description: this.props.vicinity}</p>
           <button onClick = {this.props.onCloseRequest}>Okay</button>
         </div>
       </div>
@@ -157,9 +157,7 @@ export default class App extends Component {
 
 {this.state.selectedGoogleHotel ? (
   <Modal
-    // description={this.state.selectedEvent.promoter && this.state.selectedEvent.promoter.name ? this.state.selectedEvent.promoter.name : 'Ticketmaster API did not provide a description'}
-    // event={this.state.selectedEvent}
-    // name={this.state.selectedEvent.name}
+    vicinity={this.state.selectedGoogleHotel.vicinity}
     hotelname={this.state.selectedGoogleHotel.name}
     onCloseRequest={() => {
      console.log('closed')
