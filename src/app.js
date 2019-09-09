@@ -33,7 +33,7 @@ class Modal extends React.Component {
     return(
       <div className = {'modal-wrapper '+this.props.modalVisibility}>
         <div className = 'modal'>
-          <h1>Event: {this.props.name}</h1>
+          <h1> {this.props.name? this.props.name: this.props.hotelname}</h1>
           <p>Description: {this.props.description}</p>
           <button onClick = {this.props.onCloseRequest}>Okay</button>
         </div>
@@ -53,7 +53,8 @@ export default class App extends Component {
   },
   hotels:[],
   events: [],
-  selectedEvent: null
+  selectedEvent: null,
+  selectedGoogleHotel: null,
   };
 //this mosh put in Google is not allow to call directly to their server and require to use the SDK, that's why is different.
 //Using Google Maps API via the SDK requires the SDK script to load.
@@ -79,7 +80,7 @@ export default class App extends Component {
   }
 
   getHotels = (x) => {
-    console.log(x);
+    //console.log(x);
     console.log('this is x length'+x.length)
     x.map(hotel=>console.log(hotel.geometry.location.lat(),hotel.geometry.location.lng()))
     console.log('the state is : ');
@@ -93,7 +94,7 @@ export default class App extends Component {
     .then((response) => response.json())
     .then((responseJson) => {
       const events = responseJson._embedded.events;
-      console.log(events)
+      //console.log(events)
       this.setState({
         events,
         viewport: {
@@ -112,7 +113,7 @@ export default class App extends Component {
 
   render() {
     const {viewport} = this.state;
-    console.log(viewport);
+    //console.log(viewport);
 
     return (
 
@@ -137,23 +138,36 @@ export default class App extends Component {
         />
 
 {this.state.hotels.map((hotel, idx) => {
-          return <Marker
-            key={idx}
-            longitude={Number(hotel.geometry.location.lng())}
-            latitude={Number(hotel.geometry.location.lat())}
-          >
-            <img style={{width: 20, height: 20, borderRadius: '50%'}} src="https://png.pngtree.com/element_our/md/20180518/md_5afec7ed7dd4e.jpg" />
-            {/* <button className="theme-btn" onClick={e => {
-              e.preventDefault()
-              console.log('a hotel was clicked');
-              // this.setState({modalVisibility: 'visible'})
-              // this.setState({selectedEvent: event})
-              }}
-            >
-              <img src="/skateboarding.svg" alt="Skate Park Icon" width='20px' />
-            </button> */}
-          </Marker>
-        })}
+  return <Marker
+    key={idx}
+    longitude={Number(hotel.geometry.location.lng())}
+    latitude={Number(hotel.geometry.location.lat())}
+  >
+    <img style={{width: 20, height: 20, borderRadius: '50%'}} src="https://png.pngtree.com/element_our/md/20180518/md_5afec7ed7dd4e.jpg" 
+    onClick={e => {
+      e.preventDefault();
+      console.log('a hotel was clicked');
+       this.setState({modalVisibility: 'visible'})
+       this.setState({selectedGoogleHotel: hotel})
+      }}
+    />
+  </Marker>
+})}
+
+
+{this.state.selectedGoogleHotel ? (
+  <Modal
+    // description={this.state.selectedEvent.promoter && this.state.selectedEvent.promoter.name ? this.state.selectedEvent.promoter.name : 'Ticketmaster API did not provide a description'}
+    // event={this.state.selectedEvent}
+    // name={this.state.selectedEvent.name}
+    hotelname={this.state.selectedGoogleHotel.name}
+    onCloseRequest={() => {
+     console.log('closed')
+     this.setState({selectedGoogleHotel: null})
+     this.setState({modalVisibility: 'hidden'});
+    }} modalVisibility = {this.state.modalVisibility}
+  />
+  ) : null}
 
 
 
