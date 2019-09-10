@@ -15,7 +15,9 @@ const geolocateStyle = {
   position: 'absolute',
   top: 0,
   left: 0,
-  margin: 10
+  margin: 10,
+  zIndex:100
+
 };
 
 //const ticketMasterKey=process.env.local.TICKETMASTER_KEY
@@ -126,10 +128,10 @@ export default class App extends Component {
         mapboxApiAccessToken={REACT_APP_MAPBOX_API_KEY}
 
       >
-     <Navbar dark color="primary">
-        <div className="container">
+     <Navbar style={{zIndex:99}} dark color="primary">
+        <div style={{marginLeft:'2.5vw'}} className="">
           <NavbarBrand href="/">React local Events</NavbarBrand>
-        </div>
+          </div>
       </Navbar>
         <GeolocateControl
           style={geolocateStyle}
