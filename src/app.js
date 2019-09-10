@@ -9,7 +9,7 @@ import MapGL, {GeolocateControl, Marker, Popup} from 'react-map-gl';
 //https://medium.com/@trekinbami/using-environment-variables-in-react-6b0a99d83cf5
 
 //import { REACT_APP_MAPBOX_API_KEY, TICKETMASTER_KEY } from './env';
-import {Navbar, NavbarBrand} from 'reactstrap';
+import {Navbar, NavbarBrand, Button} from 'reactstrap';
 
 const geolocateStyle = {
   position: 'absolute',
@@ -129,7 +129,7 @@ export default class App extends Component {
 
       >
      <Navbar style={{zIndex:99}} dark color="primary">
-        <div style={{marginLeft:'2.5vw'}} className="">
+        <div style={{marginLeft:'3vw'}} className="">
           <NavbarBrand href="/">React local Events</NavbarBrand>
           </div>
       </Navbar>
@@ -177,14 +177,15 @@ export default class App extends Component {
             longitude={Number(event._embedded.venues[0].location.longitude)}
             latitude={Number(event._embedded.venues[0].location.latitude)}
           >
-            <button className="theme-btn" onClick={e => {
-              e.preventDefault()
-              this.setState({modalVisibility: 'visible'})
-              this.setState({selectedEvent: event})
-              }}
-            >
-              <img src="/skateboarding.svg" alt="Skate Park Icon" width='20px' />
-            </button>
+    
+              <img style={{width: 30, height: 30, borderRadius: ''}} src="ticketmaster.png" 
+                 onClick={e => {
+                  e.preventDefault();
+                   this.setState({modalVisibility: 'visible'})
+                   this.setState({selectedEvent: event})
+                  }}   
+              />
+           
           </Marker>
         })}
 
@@ -200,9 +201,9 @@ export default class App extends Component {
             }} modalVisibility = {this.state.modalVisibility}
           />
           ) : null}
+		    <Button style={{display:'block', margin:5}} color="warning" onClick={this.searchIt}>find hotels ({this.state.hotels.length})</Button>
 
-        <button onClick={this.handleClick}>Click Me ({this.state.events.length})</button>
-		<button onClick={this.searchIt}>find hotels ({this.state.hotels.length})</button>
+        <Button style={{display:'block', margin:5}} color="primary" onClick={this.handleClick}>Click Me ({this.state.events.length})</Button>
       </MapGL>
 
 
