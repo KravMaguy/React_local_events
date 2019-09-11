@@ -68,17 +68,37 @@ export default class App extends Component {
     );
   }
 
+  updateRequestLocation=(hisMakom)=>{
+    location={
+      lat: hisMakom.coords.latitude,
+      lng: hisMakom.coords.longitude
+    }
+      console.log('your location: '+location)
+    return location;
+  }
+
+  gaveReshus=()=>{
+    if (navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(this.updateRequestLocation);
+    } else {
+      return false;
+    }
+  }
+
   searchIt= () => {
-    console.log('check1')
-    var request={
-    location: {
-    lat: 41.86205404,
-    lng: -87.61682143},
-    radius: 10000,
-    keyword: 'hotel'
+    console.log('check if heGaveReshus')
+    if (this.gaveReshus()){
+      var request={
+        location: location,
+        radius: 10000,
+        keyword: 'hotel'
+        }
+    
+        this.service.nearbySearch(request, this.getHotels);
+    } else {
+      window.alert('needs to give reshus')
     }
 
-    this.service.nearbySearch(request, this.getHotels);
   }
 
   getHotels = (x) => {

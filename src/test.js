@@ -65,8 +65,17 @@ export default class App extends Component {
     );
   }
 
+  gaveReshus=() =>{
+    if (navigator.geolocation){
+      //navigator.geolocation.getCurrentPosition()
+    } else {
+      return false;
+    }
+  }
+
   searchIt= () => {
-    console.log('check1')
+    console.log('we need to check if isReshus')
+    if (gaveReshus){
     var request={
     location: {
     lat: 41.86205404,
@@ -76,6 +85,9 @@ export default class App extends Component {
     }
 
     this.service.nearbySearch(request, this.getHotels);
+    } else {
+      window.alert('you need to give reshus')
+    }
   }
 
   getHotels = (x) => {
@@ -112,7 +124,7 @@ export default class App extends Component {
 
   render() {
     const {viewport} = this.state;
-    console.log(viewport);
+    //console.log(viewport);
 
     return (
 
