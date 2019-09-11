@@ -51,7 +51,8 @@ export default class App extends Component {
     longitude: -87.61682143,
     width: "100vw",
     height: "100vh",
-    zoom: 10
+    zoom: 10,
+    userLocation: null
   },
   hotels:[],
   events: [],
@@ -66,39 +67,41 @@ export default class App extends Component {
   componentDidMount() {
     this.service = new google.maps.places.PlacesService(document.getElementById("googlestuff")
     );
+
+    this.askReshus();
   }
 
   updateRequestLocation=(hisMakom)=>{
-    location={
-      lat: hisMakom.coords.latitude,
-      lng: hisMakom.coords.longitude
-    }
-      console.log('your location: '+location)
-    return location;
+    this.setState({
+      viewport: {
+        ...this.state.viewport,
+        latitude: hisMakom.coords.latitude,
+        longitude: hisMakom.coords.longitude,
+      },
+      userLocation: {
+        lat: hisMakom.coords.latitude,
+        lng: hisMakom.coords.longitude
+      }
+    }, this.searchIt);
   }
 
-  gaveReshus=()=>{
+  askReshus=()=>{
     if (navigator.geolocation){
       navigator.geolocation.getCurrentPosition(this.updateRequestLocation);
     } else {
-      return false;
+      console.error('browser not support location');
     }
   }
 
   searchIt= () => {
     console.log('check if heGaveReshus')
-    if (this.gaveReshus()){
-      var request={
-        location: location,
-        radius: 10000,
-        keyword: 'hotel'
-        }
-    
-        this.service.nearbySearch(request, this.getHotels);
-    } else {
-      window.alert('needs to give reshus')
+    var request={
+      location: this.state.userLocation,
+      radius: 10000,
+      keyword: 'hotel'
     }
 
+    this.service.nearbySearch(request, this.getHotels);
   }
 
   getHotels = (x) => {
@@ -165,12 +168,14 @@ export default class App extends Component {
     longitude={Number(hotel.geometry.location.lng())}
     latitude={Number(hotel.geometry.location.lat())}
   >
-    <img style={{width: 20, height: 20, borderRadius: '50%'}} src="https://png.pngtree.com/element_our/md/20180518/md_5afec7ed7dd4e.jpg" 
+    <img style={{width: 20, height: 20, borderRadius: '50%'}} src="https://png.pngtree.com/element_our/md/20180518/md_5afec7ed7dd4e.jpg"
     onClick={e => {
       e.preventDefault();
       console.log('a hotel was clicked');
-       this.setState({modalVisibility: 'visible'})
-       this.setState({selectedGoogleHotel: hotel})
+       this.setState({
+         modalVisibility: 'visible',
+         selectedGoogleHotel: hotel
+        })
       }}
     />
   </Marker>
@@ -197,15 +202,15 @@ export default class App extends Component {
             longitude={Number(event._embedded.venues[0].location.longitude)}
             latitude={Number(event._embedded.venues[0].location.latitude)}
           >
-    
-              <img style={{width: 30, height: 30, borderRadius: ''}} src="ticketmaster.png" 
+
+              <img style={{width: 30, height: 30, borderRadius: ''}} src="ticketmaster.png"
                  onClick={e => {
                   e.preventDefault();
                    this.setState({modalVisibility: 'visible'})
                    this.setState({selectedEvent: event})
-                  }}   
+                  }}
               />
-           
+
           </Marker>
         })}
 
