@@ -78,7 +78,7 @@ export default class App extends Component {
         lat: hisMakom.coords.latitude,
         lng: hisMakom.coords.longitude
       }
-    }, this.searchIt);
+    });
   }
 
   askReshus=()=>{
@@ -90,9 +90,10 @@ export default class App extends Component {
   }
 
   searchIt= () => {
+    console.log('inside serachit')
     this.askReshus();
 
-    // console.log('check if heGaveReshus')
+
     // var request={
     //   location: this.state.userLocation,
     //   radius: 10000,
@@ -112,6 +113,7 @@ export default class App extends Component {
   }
 
   handleClick = () => {
+    console.log('inside handleclick')
     this.askReshus();
 
     // return fetch(ticketUrl)
