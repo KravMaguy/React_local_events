@@ -122,7 +122,8 @@ export default class App extends Component {
     console.log('inside state your location is stored as: ')
 
     console.log(this.state.userLocation)
-      ticketUrl=ticketUrl+this.state.userLocation
+    let latlng=this.state.userLocation.lat+","+this.state.userLocation.lng
+      ticketUrl=ticketUrl+latlng
     return fetch(ticketUrl)
     .then((response) => response.json())
     .then((responseJson) => {
