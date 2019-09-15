@@ -20,11 +20,7 @@ const geolocateStyle = {
 
 };
 
-//const ticketMasterKey=process.env.local.TICKETMASTER_KEY
-//const ticketUrl =`https://app.ticketmaster.com/discovery/v2/events.json?size=30&city=chicago&apikey=${ticketMasterKey}`;
-//const REACT_APP_MAPBOX_API_KEY=process.env.local.REACT_APP_MAPBOX_API;
 
-const hotelUrl=`https://maps.googleapis.com/maps/api/place/nearbysearch/json?key=AIzaSyCFImmZyGtKhyhfyKxnJwd7csqCtXaNiIo&type=hotel&location=41.86205404,-87.61682143&radius=5500`
 const ticketUrl =`https://app.ticketmaster.com/discovery/v2/events.json?size=30&city=chicago&apikey=4rTME5oHYcimuAeEz6QFqG0XSB1gHhC9`;
 const REACT_APP_MAPBOX_API_KEY='pk.eyJ1IjoiZ3JleWtyYXYiLCJhIjoiY2p4bXlwb3NjMDkwdDNobzZkYXIxeTB2bCJ9.23vaPNjrffSym1U2FJbPVw'
 
@@ -59,11 +55,6 @@ export default class App extends Component {
   selectedEvent: null,
   selectedGoogleHotel: null,
   };
-//this mosh put in Google is not allow to call directly to their server and require to use the SDK, that's why is different.
-//Using Google Maps API via the SDK requires the SDK script to load.
-//this above he said does not make sense because they do not provide an sdk no environment like android studio, leapmotion
-//no build tools, no set of tools to measure the performance so why is it an sdk? I just want them to give me some geojson and hotel info
-//asking for some info that is already public on their map is a get and is idempotence of the highest degree
   componentDidMount() {
     this.service = new google.maps.places.PlacesService(document.getElementById("googlestuff")
     );
@@ -87,11 +78,28 @@ export default class App extends Component {
 
   askReshus=()=>{
     if (navigator.geolocation){
-      navigator.geolocation.getCurrentPosition(this.updateRequestLocation);
+      navigator.geolocation.getCurrentPosition(this.updateRequestLocation, this.showError);
     } else {
       console.error('browser not support location');
     }
   }
+
+   showError=(error)=> {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            console.log("User denied the request for Geolocation.")
+            break;
+        case error.POSITION_UNAVAILABLE:
+            console.log("Location information is unavailable.")
+            break;
+        case error.TIMEOUT:
+            console.log("The request to get user location timed out.")
+            break;
+        case error.UNKNOWN_ERROR:
+            console.log("An unknown error occurred.")
+            break;
+    }
+}
 
   searchIt= () => {
     console.log('check if heGaveReshus')
@@ -105,40 +113,37 @@ export default class App extends Component {
   }
 
   getHotels = (x) => {
-    //console.log(x);
-    console.log('this is x length'+x.length)
     x.map(hotel=>console.log(hotel.geometry.location.lat(),hotel.geometry.location.lng()))
-    console.log('the state is : ');
-
     this.setState({hotels:x})
-    console.log(this.state);
   }
 
   handleClick = () => {
-    return fetch(ticketUrl)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      const events = responseJson._embedded.events;
-      //console.log(events)
-      this.setState({
-        events,
-        viewport: {
-          ...this.state.viewport,
-          latitude: Number(events[1]._embedded.venues[0].location.latitude),
-          longitude: Number(events[1]._embedded.venues[0].location.longitude),
-        }
-      })
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+    console.log('inside handle click')
+    console.log('inside state your location is stored as: ')
+
+    console.log(this.state.userLocation)
+    // return fetch(ticketUrl)
+    // .then((response) => response.json())
+    // .then((responseJson) => {
+    //   const events = responseJson._embedded.events;
+    //   this.setState({
+    //     events,
+    //     viewport: {
+    //       ...this.state.viewport,
+    //       latitude: Number(events[1]._embedded.venues[0].location.latitude),
+    //       longitude: Number(events[1]._embedded.venues[0].location.longitude),
+    //     }
+    //   })
+    // })
+    // .catch((error) => {
+    //   console.error(error);
+    // });
   }
 
   _onViewportChange = viewport => this.setState({viewport});
 
   render() {
     const {viewport} = this.state;
-    //console.log(viewport);
 
     return (
 
@@ -194,7 +199,6 @@ export default class App extends Component {
   />
   ) : null}
 
-//
 
        {this.state.events.map((event, idx) => {
           return <Marker
