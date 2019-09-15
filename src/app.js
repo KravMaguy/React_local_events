@@ -79,6 +79,12 @@ export default class App extends Component {
         lng: hisMakom.coords.longitude
       }
     });
+    var request={
+      location: this.state.userLocation,
+      radius: 10000,
+      keyword: 'hotel'
+    }
+    return request;
   }
 
   askReshus=()=>{
@@ -89,18 +95,12 @@ export default class App extends Component {
     }
   }
 
-  searchIt= () => {
+  locateHotels= (request) => {
+    request.persist()
     console.log('inside serachit')
     this.askReshus();
 
-
-     var request={
-       location: this.state.userLocation,
-       radius: 10000,
-       keyword: 'hotel'
-     }
-
-     this.service.nearbySearch(request, this.getHotels);
+    this.service.nearbySearch(request, this.getHotels);
   }
 
   getHotels = (x) => {
@@ -223,7 +223,7 @@ export default class App extends Component {
             }} modalVisibility = {this.state.modalVisibility}
           />
           ) : null}
-		    <Button style={{display:'block', margin:5}} color="warning" onClick={this.searchIt}>find hotels ({this.state.hotels.length})</Button>
+		    <Button style={{display:'block', margin:5}} color="warning" onClick={this.locateHotels}>find hotels ({this.state.hotels.length})</Button>
 
         <Button style={{display:'block', margin:5}} color="primary" onClick={this.handleClick}>Click Me ({this.state.events.length})</Button>
       </MapGL>
