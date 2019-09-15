@@ -51,19 +51,16 @@ export default class App extends Component {
     longitude: -87.61682143,
     width: "100vw",
     height: "100vh",
-    zoom: 10,
-    userLocation: null
+    zoom: 5,
+    userLocation: null,
+    pitch:90,
   },
   hotels:[],
   events: [],
   selectedEvent: null,
   selectedGoogleHotel: null,
   };
-//this mosh put in Google is not allow to call directly to their server and require to use the SDK, that's why is different.
-//Using Google Maps API via the SDK requires the SDK script to load.
-//this above he said does not make sense because they do not provide an sdk no environment like android studio, leapmotion
-//no build tools, no set of tools to measure the performance so why is it an sdk? I just want them to give me some geojson and hotel info
-//asking for some info that is already public on their map is a get and is idempotence of the highest degree
+
   componentDidMount() {
     this.service = new google.maps.places.PlacesService(document.getElementById("googlestuff")
     );
@@ -105,7 +102,6 @@ export default class App extends Component {
   }
 
   getHotels = (x) => {
-    //console.log(x);
     console.log('this is x length'+x.length)
     x.map(hotel=>console.log(hotel.geometry.location.lat(),hotel.geometry.location.lng()))
     console.log('the state is : ');
@@ -119,7 +115,6 @@ export default class App extends Component {
     .then((response) => response.json())
     .then((responseJson) => {
       const events = responseJson._embedded.events;
-      //console.log(events)
       this.setState({
         events,
         viewport: {
@@ -138,7 +133,6 @@ export default class App extends Component {
 
   render() {
     const {viewport} = this.state;
-    //console.log(viewport);
 
     return (
 
@@ -187,7 +181,6 @@ export default class App extends Component {
     vicinity={this.state.selectedGoogleHotel.vicinity}
     hotelname={this.state.selectedGoogleHotel.name}
     onCloseRequest={() => {
-     console.log('closed')
      this.setState({selectedGoogleHotel: null})
      this.setState({modalVisibility: 'hidden'});
     }} modalVisibility = {this.state.modalVisibility}
@@ -220,7 +213,6 @@ export default class App extends Component {
             event={this.state.selectedEvent}
             name={this.state.selectedEvent.name}
             onCloseRequest={() => {
-             console.log('closed')
              this.setState({selectedEvent: null})
              this.setState({modalVisibility: 'hidden'});
             }} modalVisibility = {this.state.modalVisibility}
