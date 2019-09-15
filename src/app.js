@@ -118,11 +118,8 @@ export default class App extends Component {
   }
 
   handleClick = () => {
-    console.log('inside handle click')
-    console.log('inside state your location is stored as: ')
-
-    console.log(this.state.userLocation)
-    let latlng=this.state.userLocation.lat+","+this.state.userLocation.lng
+    let {lat, lng}=this.state.userLocation;
+    let latlng=lat+","+lng
       ticketUrl=ticketUrl+latlng
     return fetch(ticketUrl)
     .then((response) => response.json())
