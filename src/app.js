@@ -94,13 +94,13 @@ export default class App extends Component {
     this.askReshus();
 
 
-    // var request={
-    //   location: this.state.userLocation,
-    //   radius: 10000,
-    //   keyword: 'hotel'
-    // }
+     var request={
+       location: this.state.userLocation,
+       radius: 10000,
+       keyword: 'hotel'
+     }
 
-    // this.service.nearbySearch(request, this.getHotels);
+     this.service.nearbySearch(request, this.getHotels);
   }
 
   getHotels = (x) => {
