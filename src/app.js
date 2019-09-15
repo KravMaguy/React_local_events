@@ -194,7 +194,7 @@ export default class App extends Component {
   />
   ) : null}
 
-
+//
 
        {this.state.events.map((event, idx) => {
           return <Marker
