@@ -65,7 +65,6 @@ export default class App extends Component {
     this.service = new google.maps.places.PlacesService(document.getElementById("googlestuff")
     );
 
-    this.askReshus();
   }
 
   updateRequestLocation=(hisMakom)=>{
@@ -91,14 +90,16 @@ export default class App extends Component {
   }
 
   searchIt= () => {
-    console.log('check if heGaveReshus')
-    var request={
-      location: this.state.userLocation,
-      radius: 10000,
-      keyword: 'hotel'
-    }
+    this.askReshus();
 
-    this.service.nearbySearch(request, this.getHotels);
+    // console.log('check if heGaveReshus')
+    // var request={
+    //   location: this.state.userLocation,
+    //   radius: 10000,
+    //   keyword: 'hotel'
+    // }
+
+    // this.service.nearbySearch(request, this.getHotels);
   }
 
   getHotels = (x) => {
@@ -111,22 +112,24 @@ export default class App extends Component {
   }
 
   handleClick = () => {
-    return fetch(ticketUrl)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      const events = responseJson._embedded.events;
-      this.setState({
-        events,
-        viewport: {
-          ...this.state.viewport,
-          latitude: Number(events[1]._embedded.venues[0].location.latitude),
-          longitude: Number(events[1]._embedded.venues[0].location.longitude),
-        }
-      })
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+    this.askReshus();
+
+    // return fetch(ticketUrl)
+    // .then((response) => response.json())
+    // .then((responseJson) => {
+    //   const events = responseJson._embedded.events;
+    //   this.setState({
+    //     events,
+    //     viewport: {
+    //       ...this.state.viewport,
+    //       latitude: Number(events[1]._embedded.venues[0].location.latitude),
+    //       longitude: Number(events[1]._embedded.venues[0].location.longitude),
+    //     }
+    //   })
+    // })
+    // .catch((error) => {
+    //   console.error(error);
+    // });
   }
 
   _onViewportChange = viewport => this.setState({viewport});
