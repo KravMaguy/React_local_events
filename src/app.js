@@ -21,7 +21,7 @@ const geolocateStyle = {
 };
 
 
-const ticketUrl =`https://app.ticketmaster.com/discovery/v2/events.json?size=30&city=chicago&apikey=4rTME5oHYcimuAeEz6QFqG0XSB1gHhC9`;
+const ticketUrl =`https://app.ticketmaster.com/discovery/v2/events.json?&apikey=4rTME5oHYcimuAeEz6QFqG0XSB1gHhC9&latlong=`;
 const REACT_APP_MAPBOX_API_KEY='pk.eyJ1IjoiZ3JleWtyYXYiLCJhIjoiY2p4bXlwb3NjMDkwdDNobzZkYXIxeTB2bCJ9.23vaPNjrffSym1U2FJbPVw'
 
 
@@ -122,22 +122,23 @@ export default class App extends Component {
     console.log('inside state your location is stored as: ')
 
     console.log(this.state.userLocation)
-    // return fetch(ticketUrl)
-    // .then((response) => response.json())
-    // .then((responseJson) => {
-    //   const events = responseJson._embedded.events;
-    //   this.setState({
-    //     events,
-    //     viewport: {
-    //       ...this.state.viewport,
-    //       latitude: Number(events[1]._embedded.venues[0].location.latitude),
-    //       longitude: Number(events[1]._embedded.venues[0].location.longitude),
-    //     }
-    //   })
-    // })
-    // .catch((error) => {
-    //   console.error(error);
-    // });
+      ticketUrl=ticketUrl+this.state.userLocation
+    return fetch(ticketUrl)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      const events = responseJson._embedded.events;
+      this.setState({
+        events,
+        viewport: {
+          ...this.state.viewport,
+          latitude: Number(events[1]._embedded.venues[0].location.latitude),
+          longitude: Number(events[1]._embedded.venues[0].location.longitude),
+        }
+      })
+    })
+    .catch((error) => {
+      console.error(error);
+    });
   }
 
   _onViewportChange = viewport => this.setState({viewport});
