@@ -82,7 +82,7 @@ export default class App extends Component {
         lat: hisMakom.coords.latitude,
         lng: hisMakom.coords.longitude
       }
-    }, this.searchIt);
+    });
   }
 
   askReshus=()=>{
