@@ -20,6 +20,11 @@ const geolocateStyle = {
 
 };
 
+const buttonStyles={
+  display:'block',
+  margin:5,
+  zIndex:100
+}
 
 let ticketUrl =`https://app.ticketmaster.com/discovery/v2/events.json?&apikey=4rTME5oHYcimuAeEz6QFqG0XSB1gHhC9&latlong=`;
 const REACT_APP_MAPBOX_API_KEY='pk.eyJ1IjoiZ3JleWtyYXYiLCJhIjoiY2p4bXlwb3NjMDkwdDNobzZkYXIxeTB2bCJ9.23vaPNjrffSym1U2FJbPVw'
@@ -229,9 +234,8 @@ export default class App extends Component {
             }} modalVisibility = {this.state.modalVisibility}
           />
           ) : null}
-		    <Button style={{display:'block', margin:5}} color="warning" onClick={this.searchIt}>find hotels ({this.state.hotels.length})</Button>
-
-        <Button style={{display:'block', margin:5}} color="primary" onClick={this.handleClick}>Click Me ({this.state.events.length})</Button>
+		    <Button style={buttonStyles} color="warning" onClick={this.searchIt}>find hotels ({this.state.hotels.length})</Button>
+        <Button style={buttonStyles} color="primary" onClick={this.handleClick}>Click Me ({this.state.events.length})</Button>
       </MapGL>
 
 
