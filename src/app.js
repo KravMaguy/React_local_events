@@ -22,13 +22,13 @@ const geolocateStyle = {
 
 const buttonStyles={
   display:'block',
-  margin:5,
+  margin:7,
   zIndex:100
 }
 
 let ticketUrl =`https://app.ticketmaster.com/discovery/v2/events.json?&apikey=4rTME5oHYcimuAeEz6QFqG0XSB1gHhC9&latlong=`;
-const REACT_APP_MAPBOX_API_KEY='pk.eyJ1IjoiZ3JleWtyYXYiLCJhIjoiY2p4bXlwb3NjMDkwdDNobzZkYXIxeTB2bCJ9.23vaPNjrffSym1U2FJbPVw'
-
+const REACT_APP_MAPBOX_API_KEY='pk.eyJ1IjoiZ3JleWtyYXYiLCJhIjoiY2p4bXlwb3NjMDkwdDNobzZkYXIxeTB2bCJ9.23vaPNjrffSym1U2FJbPVw';
+const EventBrightUrl=`https://www.eventbriteapi.com/v3/events/search/?location.within=8mi&start_date.keyword=this_week&token=ZDZF7QS5ACTJOA6V365N&expand=venue`;
 
 class Modal extends React.Component {
   render(){
@@ -57,8 +57,10 @@ export default class App extends Component {
   },
   hotels:[],
   events: [],
+  eventBrights: [],
   selectedEvent: null,
   selectedGoogleHotel: null,
+  selectedBright : null
   };
   componentDidMount() {
     this.service = new google.maps.places.PlacesService(document.getElementById("googlestuff")
@@ -126,6 +128,8 @@ export default class App extends Component {
     let {lat, lng}=this.state.userLocation;
     let latlng=lat+","+lng
       ticketUrl=ticketUrl+latlng
+      console.log('the tiecketmaster Url----')
+      console.log(ticketUrl)
     return fetch(ticketUrl)
     .then((response) => response.json())
     .then((responseJson) => {
@@ -143,6 +147,26 @@ export default class App extends Component {
       console.error(error);
     });
   }
+
+  // event brite handler 
+
+  eventBrightSearch = () => {
+    let {lat, lng}=this.state.userLocation;
+      let UrlParams=`&location.latitude=${lat}&location.longitude=${lng}`
+      let Url=EventBrightUrl+UrlParams;
+    return fetch(Url)
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log('the json. eventbrite api_____')
+      const events = responseJson.events;
+
+      console.log(responseJson.events[0].venue)
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  }
+
 
   _onViewportChange = viewport => this.setState({viewport});
 
@@ -234,8 +258,9 @@ export default class App extends Component {
             }} modalVisibility = {this.state.modalVisibility}
           />
           ) : null}
+        <Button style={buttonStyles} color="primary" onClick={this.handleClick}>TicketMaster ({this.state.events.length})</Button>
 		    <Button style={buttonStyles} color="warning" onClick={this.searchIt}>find hotels ({this.state.hotels.length})</Button>
-        <Button style={buttonStyles} color="primary" onClick={this.handleClick}>Click Me ({this.state.events.length})</Button>
+        <Button style={buttonStyles} color="info" onClick={this.eventBrightSearch}>eventbriteapi </Button>
       </MapGL>
 
 
