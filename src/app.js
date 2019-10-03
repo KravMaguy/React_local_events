@@ -161,15 +161,15 @@ export default class App extends Component {
       const eventBrights = responseJson.events;
       console.log(eventBrights)
       // console.log(responseJson.events[1].venue)
-      eventBrights.map(event=>console.log(event.venue.latitude, event.venue.longitude))
-      // this.setState({
-      //   eventBrights,
-      //   viewport: {
-      //     ...this.state.viewport,
-      //     latitude: Number(events[1]._embedded.venues[0].location.latitude),
-      //     longitude: Number(events[1]._embedded.venues[0].location.longitude),
-      //   }
-      // })
+      //eventBrights.map(event=>console.log(event.venue.latitude, event.venue.longitude))
+       this.setState({
+         eventBrights,
+         viewport: {
+           ...this.state.viewport,
+           latitude: Number(eventBrights[0].venue.latitude),
+           longitude: Number(eventBrights[0].venue.longitude),
+         }
+       })
     })
     .catch((error) => {
       console.error(error);
