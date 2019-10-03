@@ -58,6 +58,7 @@ export default class App extends Component {
   },
   hotels:[],
   events: [],
+  events_visibility: false,
   eventBrights: [],
   selectedEvent: null,
   selectedGoogleHotel: null,
@@ -126,27 +127,38 @@ export default class App extends Component {
   }
 
   handleClick = () => {
-    let {lat, lng}=this.state.userLocation;
-    let latlng=lat+","+lng
-      ticketUrl=ticketUrl+latlng
-      console.log('the tiecketmaster Url----')
-      console.log(ticketUrl)
-    return fetch(ticketUrl)
-    .then((response) => response.json())
-    .then((responseJson) => {
-      const events = responseJson._embedded.events;
-      this.setState({
-        events,
-        viewport: {
-          ...this.state.viewport,
-          latitude: Number(events[1]._embedded.venues[0].location.latitude),
-          longitude: Number(events[1]._embedded.venues[0].location.longitude),
-        }
+    if (this.state.events_visibility){
+      this.setState ({ 
+        events_visibility: false });
+    } else {
+        this.setState ({ 
+          events_visibility: true})
+
+                let {lat, lng}=this.state.userLocation;
+      let latlng=lat+","+lng
+        ticketUrl=ticketUrl+latlng
+        console.log('the tiecketmaster Url----')
+        console.log(ticketUrl)
+      return fetch(ticketUrl)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        const events = responseJson._embedded.events;
+        this.setState({
+          events,
+          viewport: {
+            ...this.state.viewport,
+            latitude: Number(events[1]._embedded.venues[0].location.latitude),
+            longitude: Number(events[1]._embedded.venues[0].location.longitude),
+          }
+        })
       })
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+      .catch((error) => {
+        console.error(error);
+      });
+      }
+
+
+
   }
 
   // event brite handler 
@@ -238,7 +250,9 @@ export default class App extends Component {
   ) : null}
 
 
-       {this.state.events.map((event, idx) => {
+
+if(this.state.events_visibility){
+       this.state.events.map((event, idx) => {
           return <Marker
             key={idx}
             longitude={Number(event._embedded.venues[0].location.longitude)}
@@ -254,7 +268,8 @@ export default class App extends Component {
               />
 
           </Marker>
-        })}
+        })
+} 
 
 {this.state.selectedEvent ? (
           <Modal
