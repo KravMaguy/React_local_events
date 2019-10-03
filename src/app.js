@@ -23,7 +23,8 @@ const geolocateStyle = {
 const buttonStyles={
   display:'block',
   margin:7,
-  zIndex:100
+  zIndex:'999!important'
+  
 }
 
 let ticketUrl =`https://app.ticketmaster.com/discovery/v2/events.json?&apikey=4rTME5oHYcimuAeEz6QFqG0XSB1gHhC9&latlong=`;
