@@ -134,7 +134,10 @@ export default class App extends Component {
         this.setState ({ 
           events_visibility: true})
 
-                let {lat, lng}=this.state.userLocation;
+      }
+
+      
+      let {lat, lng}=this.state.userLocation;
       let latlng=lat+","+lng
         ticketUrl=ticketUrl+latlng
         console.log('the tiecketmaster Url----')
@@ -155,9 +158,6 @@ export default class App extends Component {
       .catch((error) => {
         console.error(error);
       });
-      }
-
-
 
   }
 
@@ -251,7 +251,7 @@ export default class App extends Component {
 
 
 
-if(this.state.events_visibility){
+{this.state.events_visibility&&
        this.state.events.map((event, idx) => {
           return <Marker
             key={idx}
