@@ -267,12 +267,35 @@ export default class App extends Component {
             }} modalVisibility = {this.state.modalVisibility}
           />
           ) : null}
+
+
+          {/* this start */}
+
+          {this.state.eventBrights.map((event, idx) => {
+          return <Marker
+            key={idx}
+            longitude={Number(event.venue.longitude)}
+            latitude={Number(event.venue.latitude)}
+          >
+
+              <img style={{width: 30, height: 30, borderRadius: ''}} src="eventbrite_logo.png"
+                //  onClick={e => {
+                //   e.preventDefault();
+                //    this.setState({modalVisibility: 'visible'})
+                //    this.setState({selectedEvent: event})
+                //   }}
+              />
+
+          </Marker>
+        })}
+
+
+
+
         <Button style={buttonStyles} color="primary" onClick={this.handleClick}>TicketMaster ({this.state.events.length})</Button>
 		    <Button style={buttonStyles} color="warning" onClick={this.searchIt}>find hotels ({this.state.hotels.length})</Button>
-        <Button style={buttonStyles} color="info" onClick={this.eventBrightSearch}>eventbriteapi </Button>
+        <Button style={buttonStyles} color="info" onClick={this.eventBrightSearch}>evenbriteapi </Button>
       </MapGL>
-
-
     );
   }
 }
