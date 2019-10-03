@@ -21,10 +21,10 @@ const geolocateStyle = {
 };
 
 const buttonStyles={
+  position:'relative',
   display:'block',
   margin:7,
-  zIndex:'999!important'
-  
+  zIndex:100
 }
 
 let ticketUrl =`https://app.ticketmaster.com/discovery/v2/events.json?&apikey=4rTME5oHYcimuAeEz6QFqG0XSB1gHhC9&latlong=`;
@@ -295,7 +295,7 @@ export default class App extends Component {
 
         <Button style={buttonStyles} color="primary" onClick={this.handleClick}>TicketMaster ({this.state.events.length})</Button>
 		    <Button style={buttonStyles} color="warning" onClick={this.searchIt}>find hotels ({this.state.hotels.length})</Button>
-        <Button style={buttonStyles} color="info" onClick={this.eventBrightSearch}>evenbriteapi </Button>
+        <Button style={buttonStyles} color="info" onClick={this.eventBrightSearch}>eventbriteapi </Button>
       </MapGL>
     );
   }
