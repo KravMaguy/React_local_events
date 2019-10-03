@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './modalStyles.css';
-
+//import Background from '../fb.png';
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 import {render} from 'react-dom';
@@ -24,7 +24,7 @@ const buttonStyles={
   position:'relative',
   display:'block',
   margin:7,
-  zIndex:100
+  zIndex:100,
 }
 
 let ticketUrl =`https://app.ticketmaster.com/discovery/v2/events.json?&apikey=4rTME5oHYcimuAeEz6QFqG0XSB1gHhC9&latlong=`;
@@ -279,7 +279,7 @@ export default class App extends Component {
             latitude={Number(event.venue.latitude)}
           >
 
-              <img style={{width: 30, height: 30, borderRadius: ''}} src="eventbrite_logo.png"
+              <img style={{width: 25, height: 25, borderRadius: ''}} src="eventbrite_logo.png"
                 //  onClick={e => {
                 //   e.preventDefault();
                 //    this.setState({modalVisibility: 'visible'})
@@ -293,9 +293,10 @@ export default class App extends Component {
 
 
 
-        <Button style={buttonStyles} color="primary" onClick={this.handleClick}>TicketMaster ({this.state.events.length})</Button>
-		    <Button style={buttonStyles} color="warning" onClick={this.searchIt}>find hotels ({this.state.hotels.length})</Button>
-        <Button style={buttonStyles} color="info" onClick={this.eventBrightSearch}>eventbriteapi </Button>
+		    <Button style={buttonStyles} color="primary" onClick={this.searchIt}><img src="/e.png" width="25px" alt="Skate Park Icon" />find hotels ({this.state.hotels.length})</Button>
+        <Button style={buttonStyles} color="warning" onClick={this.eventBrightSearch}><img src="/t.png" width="25px" alt="Skate Park Icon" />eventbriteapi </Button>
+        <Button style={buttonStyles} color="light" onClick={this.handleClick}><img src="/g.png" width="25px" alt="Skate Park Icon" />TicketMaster ({this.state.events.length})</Button>
+
       </MapGL>
     );
   }
