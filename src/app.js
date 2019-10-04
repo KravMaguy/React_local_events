@@ -4,7 +4,7 @@ import './modalStyles.css';
 import 'bootstrap/dist/css/bootstrap.min.css'
 
 import {render} from 'react-dom';
-import MapGL, {GeolocateControl, Marker, Popup} from 'react-map-gl';
+import MapGL, {GeolocateControl, Marker, Popup, FlyToInterpolator} from 'react-map-gl';
 // to fix you have to go to this link and follow these steps
 //https://medium.com/@trekinbami/using-environment-variables-in-react-6b0a99d83cf5
 
@@ -33,12 +33,11 @@ const EventBrightUrl=`https://www.eventbriteapi.com/v3/events/search/?location.w
 
 class Modal extends React.Component {
   render(){
-    console.log(this.props.event)
     return(
-      <div className = {'modal-wrapper '+this.props.modalVisibility}>
+      <div onClick = {this.props.onCloseRequest} className = {'modal-wrapper '+this.props.modalVisibility}>
         <div className = 'modal'>
-          <h1> {this.props.name? this.props.name: this.props.hotelname}</h1>
-          <p> {this.props.description? this.props.description: this.props.vicinity}</p>
+          <h1> {this.props.name? this.props.name: this.props.hotelname ? this.props.hotelname : this.props.britestatus}</h1>
+           <p> {this.props.description? this.props.description: this.props.vicinity? this.props.vicinity:this.props.britename}</p> 
           <button onClick = {this.props.onCloseRequest}>Okay</button>
         </div>
       </div>
@@ -49,7 +48,8 @@ class Modal extends React.Component {
 export default class App extends Component {
   service;
   state = {
-   viewport:{ latitude: 41.86205404,
+   viewport:{ 
+    latitude: 41.86205404,
     longitude: -87.61682143,
     width: "100vw",
     height: "100vh",
@@ -59,11 +59,32 @@ export default class App extends Component {
   hotels:[],
   events: [],
   events_visibility: false,
+  hotels_visibility: false,
+  brites_visibility: false,
   eventBrights: [],
   selectedEvent: null,
   selectedGoogleHotel: null,
   selectedBright : null
   };
+
+
+  _onViewportChange = viewport =>
+  this.setState({
+    viewport: {...this.state.viewport, ...viewport}
+  });
+
+  _goToViewport = ({longitude, latitude}) => {
+    this._onViewportChange({
+      longitude,
+      latitude,
+      zoom: 11,
+      transitionInterpolator: new FlyToInterpolator(),
+      transitionDuration: 3000
+    });
+  };
+
+
+
   componentDidMount() {
     this.service = new google.maps.places.PlacesService(document.getElementById("googlestuff")
     );
@@ -112,6 +133,14 @@ export default class App extends Component {
 
   searchIt= () => {
     console.log('check if heGaveReshus')
+    if (this.state.hotels_visibility){
+      this.setState ({ 
+        hotels_visibility: false });
+    } else {
+        this.setState ({ 
+          hotels_visibility: true})
+
+      }
     var request={
       location: this.state.userLocation,
       radius: 10000,
@@ -122,7 +151,7 @@ export default class App extends Component {
   }
 
   getHotels = (x) => {
-    x.map(hotel=>console.log(hotel.geometry.location.lat(),hotel.geometry.location.lng()))
+   // x.map(hotel=>console.log(hotel.geometry.location.lat(),hotel.geometry.location.lng()))
     this.setState({hotels:x})
   }
 
@@ -164,6 +193,17 @@ export default class App extends Component {
   // event brite handler 
 
   eventBrightSearch = () => {
+    if (this.state.brites_visibility){
+      this.setState ({ 
+        brites_visibility: false });
+    } else {
+        this.setState ({ 
+          brites_visibility: true})
+
+      }
+
+
+
     let {lat, lng}=this.state.userLocation;
       let UrlParams=`&location.latitude=${lat}&location.longitude=${lng}`
       let Url=EventBrightUrl+UrlParams;
@@ -172,7 +212,8 @@ export default class App extends Component {
     .then((responseJson) => {
       console.log('the json. eventbrite api_____')
       const eventBrights = responseJson.events;
-      console.log(eventBrights)
+      console.log('parse through these')
+      console.log(eventBrights[0].status)
       // console.log(responseJson.events[1].venue)
       //eventBrights.map(event=>console.log(event.venue.latitude, event.venue.longitude))
        this.setState({
@@ -190,19 +231,19 @@ export default class App extends Component {
   }
 
 
-  _onViewportChange = viewport => this.setState({viewport});
-
   render() {
-    const {viewport} = this.state;
+    const {viewport, settings} = this.state;
 
     return (
 
       <MapGL
         {...viewport}
+        {...settings}
         width="100%"
         height="100%"
         mapStyle="mapbox://styles/mapbox/dark-v9"
         onViewportChange={this._onViewportChange}
+        dragToRotate={false}
         mapboxApiAccessToken={REACT_APP_MAPBOX_API_KEY}
 
       >
@@ -217,20 +258,21 @@ export default class App extends Component {
           trackUserLocation={true}
         />
 
-{this.state.hotels.map((hotel, idx) => {
+{this.state.hotels_visibility&&
+  this.state.hotels.map((hotel, idx) => {
   return <Marker
     key={idx}
     longitude={Number(hotel.geometry.location.lng())}
     latitude={Number(hotel.geometry.location.lat())}
   >
-    <img style={{width: 20, height: 20, borderRadius: '50%'}} src="https://png.pngtree.com/element_our/md/20180518/md_5afec7ed7dd4e.jpg"
+    <img onViewportChange={this._goToViewport} style={{width: 20, height: 20, borderRadius: '50%'}} src="https://png.pngtree.com/element_our/md/20180518/md_5afec7ed7dd4e.jpg"
     onClick={e => {
       e.preventDefault();
       console.log('a hotel was clicked');
-       this.setState({
-         modalVisibility: 'visible',
-         selectedGoogleHotel: hotel
-        })
+      //  this.setState({
+      //    modalVisibility: 'visible',
+      //    selectedGoogleHotel: hotel
+      //   })
       }}
     />
   </Marker>
@@ -287,30 +329,44 @@ export default class App extends Component {
 
           {/* this start */}
 
-          {this.state.eventBrights.map((event, idx) => {
+          {this.state.brites_visibility&&
+            this.state.eventBrights.map((event, idx) => {
           return <Marker
+
             key={idx}
             longitude={Number(event.venue.longitude)}
             latitude={Number(event.venue.latitude)}
           >
 
               <img style={{width: 25, height: 25, borderRadius: ''}} src="eventbrite_logo.png"
-                //  onClick={e => {
-                //   e.preventDefault();
-                //    this.setState({modalVisibility: 'visible'})
-                //    this.setState({selectedEvent: event})
-                //   }}
+                 onClick={e => {
+                  e.preventDefault();
+                   this.setState({modalVisibility: 'visible'})
+                   this.setState({selectedBright: event})
+                  }}
               />
 
           </Marker>
         })}
 
+        {this.state.selectedBright ? (
+          <Modal
+            britestatus={this.state.selectedBright.status}
+            britename={this.state.selectedBright.name.text}
+            onCloseRequest={() => {
+            console.log('closed')
+            this.setState({selectedBright: null})
+            this.setState({modalVisibility: 'hidden'});
+            }} modalVisibility = {this.state.modalVisibility}
+          />
+          ) : null}
 
 
 
-		    <Button style={buttonStyles} color="primary" onClick={this.searchIt}><img src="/e.png" width="25px" alt="Skate Park Icon" />find hotels ({this.state.hotels.length})</Button>
-        <Button style={buttonStyles} color="warning" onClick={this.eventBrightSearch}><img src="/t.png" width="25px" alt="Skate Park Icon" />eventbriteapi </Button>
-        <Button style={buttonStyles} color="light" onClick={this.handleClick}><img src="/g.png" width="25px" alt="Skate Park Icon" />TicketMaster ({this.state.events.length})</Button>
+
+		    <Button style={buttonStyles} color="warning" onClick={this.searchIt}><img src="/chrome.svg" style={{marginRight:'0.3rem', width:'23px'}} alt="google Icon" />Google hotels ({this.state.hotels.length})</Button>
+        <Button style={buttonStyles} color="primary" onClick={this.eventBrightSearch}><img  style={{marginRight:'0.3rem', width:'23px'}} src="/e.png" alt="eventbrite Icon" />EventBrite ({this.state.eventBrights.length})</Button>
+        <Button style={buttonStyles} color="light" onClick={this.handleClick}><img src="/t.png" style={{transform: 'translateY(-50%)', position:'absolute', top:'50%', width:'23px'}} alt="ticketmaster Icon" />TicketMaster ({this.state.events.length})</Button>
 
       </MapGL>
     );
