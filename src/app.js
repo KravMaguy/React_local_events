@@ -67,7 +67,6 @@ export default class App extends Component {
   selectedBright : null
   };
 
-
   _onViewportChange = viewport =>
   this.setState({
     viewport: {...this.state.viewport, ...viewport}
@@ -264,15 +263,21 @@ export default class App extends Component {
     key={idx}
     longitude={Number(hotel.geometry.location.lng())}
     latitude={Number(hotel.geometry.location.lat())}
+    
+    onViewportChange={this._goToViewport}
+
   >
-    <img onViewportChange={this._goToViewport} style={{width: 20, height: 20, borderRadius: '50%'}} src="https://png.pngtree.com/element_our/md/20180518/md_5afec7ed7dd4e.jpg"
+    
+    <img style={{width: 20, height: 20, borderRadius: '50%'}} src="https://png.pngtree.com/element_our/md/20180518/md_5afec7ed7dd4e.jpg"
     onClick={e => {
       e.preventDefault();
       console.log('a hotel was clicked');
-      //  this.setState({
-      //    modalVisibility: 'visible',
-      //    selectedGoogleHotel: hotel
-      //   })
+        // this.setState({
+        //    modalVisibility: 'visible',
+        //   selectedGoogleHotel: hotel
+        //  })
+         this.props.onViewportChange()
+
       }}
     />
   </Marker>
