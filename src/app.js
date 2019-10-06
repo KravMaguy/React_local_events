@@ -264,7 +264,7 @@ export default class App extends Component {
     longitude={Number(hotel.geometry.location.lng())}
     latitude={Number(hotel.geometry.location.lat())}
     
-    onViewportChange={this._goToViewport}
+  
     // about line 268, you added the prop on an <img />  
     // while they added it to the <ControlPanel /> component.
     // The warning message is right. The img component doesn't
@@ -276,12 +276,12 @@ export default class App extends Component {
     onClick={e => {
       e.preventDefault();
       console.log('a hotel was clicked');
-        // this.setState({
+         this.setState({
         //    modalVisibility: 'visible',
-        //   selectedGoogleHotel: hotel
-        //  })
-         this.props.onViewportChange()
-
+           selectedGoogleHotel: hotel
+          }, this._goToViewport(this.state.selectedGoogleHotel.geometry.location.lat(), this.state.selectedGoogleHotel.geometry.location.long() ))
+        
+        
       }}
     />
   </Marker>
