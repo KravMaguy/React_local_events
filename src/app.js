@@ -263,7 +263,7 @@ export default class App extends Component {
     key={idx}
     longitude={Number(hotel.geometry.location.lng())}
     latitude={Number(hotel.geometry.location.lat())}
-    
+
   
     // about line 268, you added the prop on an <img />  
     // while they added it to the <ControlPanel /> component.
@@ -280,12 +280,23 @@ export default class App extends Component {
         // //    modalVisibility: 'visible',
         //    selectedGoogleHotel: hotel
         //   })
-          this._goToViewport(hotel) 
-        
+           this._goToViewport(hotel.geometry.location.lng(),hotel.geometry.location.lat() ) 
+        console.log(hotel.geometry.location.lng(),hotel.geometry.location.lat() )
       }}
     />
   </Marker>
 })}
+
+{/* _goToViewport = ({longitude, latitude}) => {
+    this._onViewportChange({
+      longitude,
+      latitude,
+      zoom: 11,
+      transitionInterpolator: new FlyToInterpolator(),
+      transitionDuration: 3000
+    });
+  }; */}
+
 
 
 {this.state.selectedGoogleHotel ? (
