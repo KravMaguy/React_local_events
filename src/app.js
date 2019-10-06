@@ -37,7 +37,7 @@ class Modal extends React.Component {
       <div onClick = {this.props.onCloseRequest} className = {'modal-wrapper '+this.props.modalVisibility}>
         <div className = 'modal'>
           <h1> {this.props.name? this.props.name: this.props.hotelname ? this.props.hotelname : this.props.britestatus}</h1>
-           <p> {this.props.description? this.props.description: this.props.vicinity? this.props.vicinity:this.props.britename}</p> 
+           <p> {this.props.description? this.props.description: this.props.vicinity? this.props.vicinity:this.props.britename}</p>
           <button onClick = {this.props.onCloseRequest}>Okay</button>
         </div>
       </div>
@@ -48,7 +48,7 @@ class Modal extends React.Component {
 export default class App extends Component {
   service;
   state = {
-   viewport:{ 
+   viewport:{
     latitude: 41.86205404,
     longitude: -87.61682143,
     width: "100vw",
@@ -133,10 +133,10 @@ export default class App extends Component {
   searchIt= () => {
     console.log('check if heGaveReshus')
     if (this.state.hotels_visibility){
-      this.setState ({ 
+      this.setState ({
         hotels_visibility: false });
     } else {
-        this.setState ({ 
+        this.setState ({
           hotels_visibility: true})
 
       }
@@ -156,15 +156,15 @@ export default class App extends Component {
 
   handleClick = () => {
     if (this.state.events_visibility){
-      this.setState ({ 
+      this.setState ({
         events_visibility: false });
     } else {
-        this.setState ({ 
+        this.setState ({
           events_visibility: true})
 
       }
 
-      
+
       let {lat, lng}=this.state.userLocation;
       let latlng=lat+","+lng
         // ticketUrl=ticketUrl+latlng
@@ -189,14 +189,14 @@ export default class App extends Component {
 
   }
 
-  // event brite handler 
+  // event brite handler
 
   eventBrightSearch = () => {
     if (this.state.brites_visibility){
-      this.setState ({ 
+      this.setState ({
         brites_visibility: false });
     } else {
-        this.setState ({ 
+        this.setState ({
           brites_visibility: true})
 
       }
@@ -264,14 +264,14 @@ export default class App extends Component {
     longitude={Number(hotel.geometry.location.lng())}
     latitude={Number(hotel.geometry.location.lat())}
 
-  
-    // about line 268, you added the prop on an <img />  
+
+    // about line 268, you added the prop on an <img />
     // while they added it to the <ControlPanel /> component.
     // The warning message is right. The img component doesn't
     // "know" what to do with this prop
 
   >
-    
+
     <img style={{width: 20, height: 20, borderRadius: '50%'}} src="https://png.pngtree.com/element_our/md/20180518/md_5afec7ed7dd4e.jpg"
     onClick={e => {
       e.preventDefault();
@@ -280,7 +280,10 @@ export default class App extends Component {
         // //    modalVisibility: 'visible',
         //    selectedGoogleHotel: hotel
         //   })
-           this._goToViewport(hotel.geometry.location.lng(),hotel.geometry.location.lat() ) 
+        this._goToViewport({
+          longitude: hotel.geometry.location.lng(),
+          latitude: hotel.geometry.location.lat()
+        });
         console.log(hotel.geometry.location.lng(),hotel.geometry.location.lat() )
       }}
     />
@@ -331,7 +334,7 @@ export default class App extends Component {
 
           </Marker>
         })
-} 
+}
 
 {this.state.selectedEvent ? (
           <Modal
