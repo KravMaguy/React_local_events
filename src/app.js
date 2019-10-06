@@ -276,11 +276,11 @@ export default class App extends Component {
     onClick={e => {
       e.preventDefault();
       console.log('a hotel was clicked');
-         this.setState({
-        //    modalVisibility: 'visible',
-           selectedGoogleHotel: hotel
-          }, this._goToViewport(this.state.selectedGoogleHotel.geometry.location.lat(), this.state.selectedGoogleHotel.geometry.location.long() ))
-        
+        //  this.setState({
+        // //    modalVisibility: 'visible',
+        //    selectedGoogleHotel: hotel
+        //   })
+          this._goToViewport(hotel) 
         
       }}
     />
