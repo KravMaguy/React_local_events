@@ -265,6 +265,10 @@ export default class App extends Component {
     latitude={Number(hotel.geometry.location.lat())}
     
     onViewportChange={this._goToViewport}
+    // about line 268, you added the prop on an <img />  
+    // while they added it to the <ControlPanel /> component.
+    // The warning message is right. The img component doesn't
+    // "know" what to do with this prop
 
   >
     
