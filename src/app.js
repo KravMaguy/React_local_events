@@ -30,6 +30,7 @@ const buttonStyles={
 const ticketUrl =`https://app.ticketmaster.com/discovery/v2/events.json?&apikey=4rTME5oHYcimuAeEz6QFqG0XSB1gHhC9&latlong=`;
 const REACT_APP_MAPBOX_API_KEY='pk.eyJ1IjoiZ3JleWtyYXYiLCJhIjoiY2p4bXlwb3NjMDkwdDNobzZkYXIxeTB2bCJ9.23vaPNjrffSym1U2FJbPVw';
 const EventBrightUrl=`https://www.eventbriteapi.com/v3/events/search/?location.within=8mi&start_date.keyword=this_week&token=ZDZF7QS5ACTJOA6V365N&expand=venue`;
+let timesClicked= 0;
 
 class Modal extends React.Component {
   render(){
@@ -54,6 +55,8 @@ export default class App extends Component {
     width: "100vw",
     height: "100vh",
     zoom: 10,
+    bearing: 0,
+    pitch: 0,
     userLocation: null
   },
   hotels:[],
@@ -66,7 +69,6 @@ export default class App extends Component {
   selectedGoogleHotel: null,
   selectedBright : null
   };
-
   _onViewportChange = viewport =>
   this.setState({
     viewport: {...this.state.viewport, ...viewport}
@@ -76,7 +78,12 @@ export default class App extends Component {
     this._onViewportChange({
       longitude,
       latitude,
-      zoom: 11,
+      zoom: 15,
+      pitch: 35,
+      bearing: 0,
+      easing: function (t) { return t; },
+      //speed: 0.2, // make the flying slow
+      curve: 1, // change the speed at which it zooms out
       transitionInterpolator: new FlyToInterpolator(),
       transitionDuration: 3000
     });
@@ -274,17 +281,22 @@ export default class App extends Component {
 
     <img style={{width: 20, height: 20, borderRadius: '50%'}} src="https://png.pngtree.com/element_our/md/20180518/md_5afec7ed7dd4e.jpg"
     onClick={e => {
-      e.preventDefault();
-      console.log('a hotel was clicked');
-        //  this.setState({
-        // //    modalVisibility: 'visible',
-        //    selectedGoogleHotel: hotel
-        //   })
+      timesClicked++;
+      if (timesClicked>1){
+        this.setState({
+          modalVisibility: 'visible',
+         selectedGoogleHotel: hotel
+        })
+        timesClicked=0;
+      }else {
         this._goToViewport({
           longitude: hotel.geometry.location.lng(),
           latitude: hotel.geometry.location.lat()
         });
-        console.log(hotel.geometry.location.lng(),hotel.geometry.location.lat() )
+      }
+     
+        
+       
       }}
     />
   </Marker>
