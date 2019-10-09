@@ -38,29 +38,31 @@ let timesClicked = 0;
 
 class Modal extends React.Component {
   render() {
+    const {onCloseRequest, name, hotelname, britestatus, britename, description, vicinity}= this.props;
+    const {modalVisibility}= this.props;
     return (
       <div
-        onClick={this.props.onCloseRequest}
-        className={"modal-wrapper " + this.props.modalVisibility}
+        onClick={onCloseRequest}
+        className={"modal-wrapper " + modalVisibility}
       >
         <div className="modal">
           <h1>
             {" "}
-            {this.props.name
-              ? this.props.name
-              : this.props.hotelname
-              ? this.props.hotelname
-              : this.props.britestatus}
+            {name
+              ? name
+              : hotelname
+              ? hotelname
+              : britestatus}
           </h1>
           <p>
             {" "}
-            {this.props.description
-              ? this.props.description
-              : this.props.vicinity
-              ? this.props.vicinity
-              : this.props.britename}
+            {description
+              ? description
+              : vicinity
+              ? vicinity
+              : britename}
           </p>
-          <button onClick={this.props.onCloseRequest}>Okay</button>
+          <button onClick={onCloseRequest}>Okay</button>
         </div>
       </div>
     );
@@ -118,15 +120,16 @@ export default class App extends Component {
   }
 
   updateRequestLocation = hisMakom => {
+    const {latitude, longitude}= hisMakom.coords;
     this.setState({
       viewport: {
         ...this.state.viewport,
-        latitude: hisMakom.coords.latitude,
-        longitude: hisMakom.coords.longitude
+        latitude: latitude,
+        longitude: longitude
       },
       userLocation: {
-        lat: hisMakom.coords.latitude,
-        lng: hisMakom.coords.longitude
+        lat: latitude,
+        lng: longitude
       }
     });
   };
@@ -160,7 +163,8 @@ export default class App extends Component {
   };
 
   searchIt = () => {
-    if (this.state.hotels_visibility) {
+    const {hotels_visibility, userLocation}= this.state;
+    if (hotels_visibility) {
       this.setState({
         hotels_visibility: false
       });
@@ -170,7 +174,7 @@ export default class App extends Component {
       });
     }
     var request = {
-      location: this.state.userLocation,
+      location: userLocation,
       radius: 10000,
       keyword: "hotel"
     };
@@ -183,7 +187,8 @@ export default class App extends Component {
   };
 
   handleClick = () => {
-    if (this.state.events_visibility) {
+    const {events_visibility}= this.state;
+    if (events_visibility) {
       this.setState({
         events_visibility: false
       });
@@ -201,7 +206,7 @@ export default class App extends Component {
         const events = responseJson._embedded.events;
         this.setState({
           events,
-          viewport: {
+          viewport:   {
             ...this.state.viewport,
             latitude: Number(events[1]._embedded.venues[0].location.latitude),
             longitude: Number(events[1]._embedded.venues[0].location.longitude)
@@ -214,7 +219,8 @@ export default class App extends Component {
   };
 
   eventBrightSearch = () => {
-    if (this.state.brites_visibility) {
+    const {brites_visibility} = this.state;
+    if (brites_visibility) {
       this.setState({
         brites_visibility: false
       });
@@ -247,7 +253,7 @@ export default class App extends Component {
 
   render() {
     const { viewport, settings } = this.state;
-
+    const {hotels_visibility, selectedGoogleHotel, hotels, modalVisibility, events_visibility, events, selectedEvent, brites_visibility, eventBrights, selectedBright}= this.state;
     return (
       <MapGL
         {...viewport}
@@ -270,8 +276,8 @@ export default class App extends Component {
           trackUserLocation={true}
         />
 
-        {this.state.hotels_visibility &&
-          this.state.hotels.map((hotel, idx) => {
+        {hotels_visibility &&
+          hotels.map((hotel, idx) => {
             return (
               <Marker
                 key={idx}
@@ -301,20 +307,20 @@ export default class App extends Component {
             );
           })}
 
-        {this.state.selectedGoogleHotel ? (
+        {selectedGoogleHotel ? (
           <Modal
-            vicinity={this.state.selectedGoogleHotel.vicinity}
-            hotelname={this.state.selectedGoogleHotel.name}
+            vicinity={selectedGoogleHotel.vicinity}
+            hotelname={selectedGoogleHotel.name}
             onCloseRequest={() => {
               this.setState({ selectedGoogleHotel: null });
               this.setState({ modalVisibility: "hidden" });
             }}
-            modalVisibility={this.state.modalVisibility}
+            modalVisibility={modalVisibility}
           />
         ) : null}
 
-        {this.state.events_visibility &&
-          this.state.events.map((event, idx) => {
+        {events_visibility &&
+          events.map((event, idx) => {
             return (
               <Marker
                 key={idx}
@@ -334,26 +340,26 @@ export default class App extends Component {
             );
           })}
 
-        {this.state.selectedEvent ? (
+        {selectedEvent ? (
           <Modal
             description={
-              this.state.selectedEvent.promoter &&
-              this.state.selectedEvent.promoter.name
-                ? this.state.selectedEvent.promoter.name
+              selectedEvent.promoter &&
+              selectedEvent.promoter.name
+                ? selectedEvent.promoter.name
                 : "Ticketmaster API did not provide a description"
             }
-            event={this.state.selectedEvent}
-            name={this.state.selectedEvent.name}
+            event={selectedEvent}
+            name={selectedEvent.name}
             onCloseRequest={() => {
               this.setState({ selectedEvent: null });
               this.setState({ modalVisibility: "hidden" });
             }}
-            modalVisibility={this.state.modalVisibility}
+            modalVisibility={modalVisibility}
           />
         ) : null}
 
-        {this.state.brites_visibility &&
-          this.state.eventBrights.map((event, idx) => {
+        {brites_visibility &&
+          eventBrights.map((event, idx) => {
             return (
               <Marker
                 key={idx}
@@ -373,15 +379,15 @@ export default class App extends Component {
             );
           })}
 
-        {this.state.selectedBright ? (
+        {selectedBright ? (
           <Modal
-            britestatus={this.state.selectedBright.status}
-            britename={this.state.selectedBright.name.text}
+            britestatus={selectedBright.status}
+            britename={selectedBright.name.text}
             onCloseRequest={() => {
               this.setState({ selectedBright: null });
               this.setState({ modalVisibility: "hidden" });
             }}
-            modalVisibility={this.state.modalVisibility}
+            modalVisibility={modalVisibility}
           />
         ) : null}
 
@@ -391,7 +397,7 @@ export default class App extends Component {
             style={{ marginRight: "0.3rem", width: "23px" }}
             alt="google Icon"
           />
-          Google hotels ({this.state.hotels.length})
+          Google hotels ({hotels.length})
         </Button>
         <Button
           style={buttonStyles}
@@ -403,7 +409,7 @@ export default class App extends Component {
             src="/e.png"
             alt="eventbrite Icon"
           />
-          EventBrite ({this.state.eventBrights.length})
+          EventBrite ({eventBrights.length})
         </Button>
         <Button style={buttonStyles} color="light" onClick={this.handleClick}>
           <img
@@ -416,7 +422,7 @@ export default class App extends Component {
             }}
             alt="ticketmaster Icon"
           />
-          TicketMaster ({this.state.events.length})
+          TicketMaster ({events.length})
         </Button>
       </MapGL>
     );
