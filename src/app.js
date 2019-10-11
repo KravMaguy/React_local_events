@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./modalStyles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./fadeStyles.css";
 
 import { render } from "react-dom";
 import MapGL, {
@@ -108,9 +109,27 @@ export default class App extends Component {
       //speed: 0.2, // make the flying slow
       //curve: 1, // change the speed at which it zooms out
       transitionInterpolator: new FlyToInterpolator(),
-      transitionDuration: 3000
+      transitionDuration: 2000
     });
   };
+
+  zoomOut=() => {
+    // this._onViewportChange({
+ 
+    //   zoom: 10,
+    //   //easing: function (t) { return t; },
+    //   //speed: 0.2, // make the flying slow
+    //   //curve: 1, // change the speed at which it zooms out
+    //   transitionInterpolator: new FlyToInterpolator(),
+    //   transitionDuration: 1500
+    // });
+    this.setState({
+      viewport: {
+        ...this.state.viewport,
+        zoom: 10
+      },
+  });
+}
 
   componentDidMount() {
     this.service = new google.maps.places.PlacesService(
@@ -279,6 +298,8 @@ export default class App extends Component {
         {hotels_visibility &&
           hotels.map((hotel, idx) => {
             return (
+              <div className="fade-in">
+
               <Marker
                 key={idx}
                 longitude={Number(hotel.geometry.location.lng())}
@@ -304,6 +325,7 @@ export default class App extends Component {
                   }}
                 />
               </Marker>
+              </div>
             );
           })}
 
@@ -322,6 +344,7 @@ export default class App extends Component {
         {events_visibility &&
           events.map((event, idx) => {
             return (
+              <div className="fade-in">
               <Marker
                 key={idx}
                 longitude={Number(event._embedded.venues[0].location.longitude)}
@@ -337,6 +360,7 @@ export default class App extends Component {
                   }}
                 />
               </Marker>
+              </div>
             );
           })}
 
@@ -361,6 +385,8 @@ export default class App extends Component {
         {brites_visibility &&
           eventBrights.map((event, idx) => {
             return (
+              <div className="fade-in">
+
               <Marker
                 key={idx}
                 longitude={Number(event.venue.longitude)}
@@ -376,6 +402,7 @@ export default class App extends Component {
                   }}
                 />
               </Marker>
+              </div>
             );
           })}
 
@@ -424,6 +451,19 @@ export default class App extends Component {
           />
           TicketMaster ({events.length})
         </Button>
+
+      
+
+        {this.state.viewport.zoom>10 ? (
+          <div className="fade-in">
+        <Button style={buttonStyles} color="warning" onClick={this.zoomOut}>
+        <i className="icon-zoom-out"></i> icon-zoom-out        
+        </Button>
+        </div>
+        ) : <div className="fade-out"><Button style={buttonStyles} color="warning" onClick={this.zoomOut}>
+        <i className="icon-zoom-out"></i> icon-zoom-out        
+        </Button></div>}
+
       </MapGL>
     );
   }
