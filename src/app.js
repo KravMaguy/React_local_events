@@ -132,6 +132,7 @@ export default class App extends Component {
 }
 
   componentDidMount() {
+    console.log(`the zoom${this.state.viewport.zoom}`)
     this.service = new google.maps.places.PlacesService(
       document.getElementById("googlestuff")
     );
@@ -460,7 +461,9 @@ export default class App extends Component {
         <i className="icon-zoom-out"></i> icon-zoom-out        
         </Button>
         </div>
-        ) : <div className="fade-out"><Button style={buttonStyles} color="warning" onClick={this.zoomOut}>
+        ) : this.state.viewport.zoom==10
+        ?null:
+        <div className="fade-out"><Button style={buttonStyles} color="warning" onClick={this.zoomOut}>
         <i className="icon-zoom-out"></i> icon-zoom-out        
         </Button></div>}
 
